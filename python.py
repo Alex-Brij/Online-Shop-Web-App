@@ -35,7 +35,9 @@ def home():
 
 @app.route('/item', methods=['GET', 'POST'])
 def item():
-    return render_template('item.html')
+    selected_item = request.args.get('type')
+    print(selected_item)
+    return render_template('item.html', item=selected_item)
 
 
 if __name__ == '__main__':
