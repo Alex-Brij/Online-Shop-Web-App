@@ -18,7 +18,9 @@
 
     <h1>Below is a list of the products availaible to buy</h1>
 
-    <p>{{items}}</p>
+    {% for item in items %}
+    <p>{{item.name}}, {{item.description}}, {{item.price}}</p>
+    {% endfor %}
 
 
 

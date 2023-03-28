@@ -14,17 +14,16 @@ class Item(db.Model):
     description = db.Column(db.String)
     price = db.Column(db.Integer)
     environmental_impact = db.Column(db.Integer)
-    #image = db.column(db.String)
+    image = db.column(db.String)
 
 # method to add an item to the table
-
     @staticmethod
     def add_item(name, description, price):
         item = Item(name=name, description=description, price=price)
         db.session.add(item)
         db.session.commit()
         return item
-    
+# method to display item as its name   
     def __repr__(self):
         return f'{self.name}'
 
