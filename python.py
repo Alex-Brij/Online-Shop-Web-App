@@ -37,7 +37,7 @@ def home():
 def item():
     selected_item = request.args.get('type')
     print(selected_item)
-    return render_template('item.html', item=selected_item)
+    return render_template('item.html', item=Item.query.filter_by(name=selected_item).first())
 
 
 if __name__ == '__main__':
