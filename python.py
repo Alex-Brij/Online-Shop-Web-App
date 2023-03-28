@@ -9,8 +9,8 @@ app.app_context().push()
 # table to hold items
 class Item(db.Model):
     __tablename__ = 'items'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, index=True, unique=True)
+    id = db.Column(db.Integer, db.ForeignKey('basket.item_id'))
+    name = db.Column(db.String, primary_key=True, index=True, unique=True)
     description = db.Column(db.String)
     price = db.Column(db.Integer)
     environmental_impact = db.Column(db.Integer)
@@ -26,6 +26,13 @@ class Item(db.Model):
 # method to display item as its name   
     def __repr__(self):
         return f'{self.name}'
+
+
+class Basket(db.Model):
+    __tablename__ = 'basket'
+    id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer)#, db.ForeignKey('items.id'))
+    quantity = db.Column(db.Integer)
 
 # renders home page with all items from database
 @app.route('/', methods=['GET', 'POST'])
