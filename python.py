@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, request, url_for
+from flask import Flask, render_template, session, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -31,6 +31,11 @@ class Item(db.Model):
 @app.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('home.html', items=Item.query.all())
+
+
+@app.route('/item', methods=['GET', 'POST'])
+def item():
+    return render_template('item.html')
 
 
 if __name__ == '__main__':

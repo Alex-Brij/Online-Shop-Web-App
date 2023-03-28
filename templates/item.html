@@ -16,12 +16,6 @@
         <a href="shopping_cart.html">Shopping Cart</a>
     </nav>
 
-    <h1>Below is a list of the products availaible to buy</h1>
-
-    {% for item in items %}
-    <p>{{item.name}}, {{item.description}}, {{item.price}}, <a href="item"> <img src="{{ url_for('static', filename='images/' + item.image)}}" height="300" width="300"/> </a> </p>
-    {% endfor %}
-
 
 </body>
 </html>
