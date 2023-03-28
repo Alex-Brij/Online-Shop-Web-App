@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, request
+from flask import Flask, render_template, session, request, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -36,7 +36,7 @@ def home():
 if __name__ == '__main__':
     db.create_all()
     if Item.query.filter_by(name='table').first() is None:
-        Item.add_item('table', 'wooden thing to hold plates', 100, 'image')
+        Item.add_item('table', 'wooden thing to hold plates', 100, 'table.jpg')
     if Item.query.filter_by(name='chair').first() is None:
-        Item.add_item('chair', 'wooden thing to sit on', 50, 'image')
+        Item.add_item('chair', 'wooden thing to sit on', 50, 'chair.jpg')
     app.run(debug=True)
