@@ -14,7 +14,7 @@ class Item():
     price = db.Column(db.Float)
     environmental_impact = db.Column(db.Integer)
 
-@app.route('/home', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('home.html')
 
