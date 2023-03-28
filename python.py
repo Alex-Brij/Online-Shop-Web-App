@@ -1,10 +1,19 @@
 from flask import Flask, render_template, session, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from wtforms import SubmitField, IntegerField
+from wtforms.validators import InputRequired
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
 db = SQLAlchemy(app)
 app.app_context().push()
+
+
+class AddItem(FlaskForm):
+    quantity = IntegerField('Quantity', validators=[InputRequired()])
+    submit = SubmitField('Submit')
+
 
 # table to hold items
 class Item(db.Model):
