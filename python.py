@@ -14,12 +14,12 @@ class Item(db.Model):
     description = db.Column(db.String)
     price = db.Column(db.Integer)
     environmental_impact = db.Column(db.Integer)
-    image = db.column(db.String)
+    image = db.Column(db.String)
 
 # method to add an item to the table
     @staticmethod
-    def add_item(name, description, price):
-        item = Item(name=name, description=description, price=price)
+    def add_item(name, description, price, image):
+        item = Item(name=name, description=description, price=price, image=image)
         db.session.add(item)
         db.session.commit()
         return item
@@ -36,7 +36,7 @@ def home():
 if __name__ == '__main__':
     db.create_all()
     if Item.query.filter_by(name='table').first() is None:
-        Item.add_item('table', 'wooden thing to hold plates', 100)
+        Item.add_item('table', 'wooden thing to hold plates', 100, 'image')
     if Item.query.filter_by(name='chair').first() is None:
-        Item.add_item('chair', 'wooden thing to sit on', 50)
+        Item.add_item('chair', 'wooden thing to sit on', 50, 'image')
     app.run(debug=True)
