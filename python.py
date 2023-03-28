@@ -27,12 +27,12 @@ class Item(db.Model):
     def __repr__(self):
         return f'{self.name}'
 
-
+# renders home page with all items from database
 @app.route('/', methods=['GET', 'POST'])
 def home():
     return render_template('home.html', items=Item.query.all())
 
-
+# gets the item that has been clicked on and sends user to item page which is now showing the information specific to that item 
 @app.route('/item', methods=['GET', 'POST'])
 def item():
     selected_item = request.args.get('type')

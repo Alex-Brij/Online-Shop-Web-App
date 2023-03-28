@@ -16,6 +16,7 @@
         <a href="shopping_cart.html">Shopping Cart</a>
     </nav>
 
+    <!-- displays information about which ever item was clicked on -->
     <p>{{item.name}}, {{item.description}}, {{item.price}}, <img src="{{ url_for('static', filename='images/' + item.image)}}" height="300" width="300"/> </p>
 
 </body>
