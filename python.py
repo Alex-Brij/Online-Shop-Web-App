@@ -40,6 +40,11 @@ def item():
     return render_template('item.html', item=Item.query.filter_by(name=selected_item).first())
 
 
+@app.route('/basket', methods=['GET', 'POST'])
+def basket():
+    return render_template('basket.html')
+
+
 if __name__ == '__main__':
     db.create_all()
     if Item.query.filter_by(name='table').first() is None:

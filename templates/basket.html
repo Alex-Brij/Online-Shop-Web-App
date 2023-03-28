@@ -5,19 +5,17 @@
 <head>
     <meta charset="utf-8">
     <link rel="stlesheet" type="text/css" href="website_stylesheet.css">
-    <title>Item</title>
+    <title>Basket</title>
 </head>
 
 
-<body> 
+<body>
 
     <nav class="menu">
         <a href="{{ url_for('home') }}">Home</a>
         <a href="{{ url_for('basket') }}">Basket</a>
     </nav>
 
-    <!-- displays information about which ever item was clicked on -->
-    <p>{{item.name}}, {{item.description}}, {{item.price}}, <img src="{{ url_for('static', filename='images/' + item.image)}}" height="300" width="300"/> </p>
-
+    <p>This is the basket</p>
 </body>
 </html>
