@@ -3,10 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, IntegerField
 from wtforms.validators import InputRequired
+from flask_bootstrap import Bootstrap
+
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'lily!'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
 db = SQLAlchemy(app)
+bootstrap = Bootstrap(app)
 app.app_context().push()
 
 
@@ -43,10 +47,19 @@ class Basket(db.Model):
     item_id = db.Column(db.Integer)#, db.ForeignKey('items.id'))
     quantity = db.Column(db.Integer)
 
+#def add_item_to_basket(item_id, quantity):
+
+
+
+
 # renders home page with all items from database
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('home.html', items=Item.query.all())
+    form = AddItem()
+    if form.validate_on_submit():
+        #basket_addition =
+        print('item added to basket') 
+    return render_template('home.html', items=Item.query.all(), form=form)
 
 # gets the item that has been clicked on and sends user to item page which is now showing the information specific to that item 
 @app.route('/item', methods=['GET', 'POST'])
