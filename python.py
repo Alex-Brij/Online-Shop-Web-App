@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
 app.app_context().push()
 
-
+# creates form to add certain quantity of an item to basket
 class AddItem(FlaskForm):
     quantity = IntegerField('Quantity', validators=[InputRequired()])
     submit = SubmitField('Submit')
@@ -36,6 +36,7 @@ class Item(db.Model):
         db.session.add(item)
         db.session.commit()
         return item
+    
 # method to display item as its name   
     def __repr__(self):
         return f'{self.name}'
@@ -53,12 +54,15 @@ class Basket(db.Model):
 
 
 # renders home page with all items from database
+# if number entered in form for adding items to bsket it gets the number and prints it
 @app.route('/', methods=['GET', 'POST'])
 def home():
     form = AddItem()
     if form.validate_on_submit():
         #basket_addition =
-        print('item added to basket') 
+        number = form.quantity.data
+        print(f'{number} items added to basket')
+        return redirect(url_for('home')) 
     return render_template('home.html', items=Item.query.all(), form=form)
 
 # gets the item that has been clicked on and sends user to item page which is now showing the information specific to that item 
