@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, IntegerField
+from wtforms import SubmitField, IntegerField, HiddenField
 from wtforms.validators import InputRequired
 from flask_bootstrap import Bootstrap
 
@@ -14,9 +14,10 @@ bootstrap = Bootstrap(app)
 app.app_context().push()
 
 # creates form to add certain quantity of an item to basket
-class AddItem(FlaskForm):
-    quantity = IntegerField('Quantity', validators=[InputRequired()])
-    submit = SubmitField('Submit')
+# class AddItem(FlaskForm):
+#     quantity = IntegerField('Quantity', validators=[InputRequired()])
+#     item_id = HiddenField()
+#     submit = SubmitField('Submit')
 
 
 # table to hold items
@@ -42,13 +43,17 @@ class Item(db.Model):
         return f'{self.name}'
 
 
-class Basket(db.Model):
+class Basket_item(db.Model):
     __tablename__ = 'basket'
     id = db.Column(db.Integer, primary_key=True)
     item_id = db.Column(db.Integer)#, db.ForeignKey('items.id'))
     quantity = db.Column(db.Integer)
 
-#def add_item_to_basket(item_id, quantity):
+    def add_item_to_basket(item_id, quantity):
+        item = Basket_item(item_id=item_id, quantity=quantity)
+        db.session.add(item)
+        db.session.commit()
+        return item
 
 
 
@@ -57,13 +62,14 @@ class Basket(db.Model):
 # if number entered in form for adding items to bsket it gets the number and prints it
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    form = AddItem()
-    if form.validate_on_submit():
-        #basket_addition =
-        number = form.quantity.data
-        print(f'{number} items added to basket')
+    if request.method == 'POST':
+        quantity = request.form['quantity']
+        item_id = request.form['item_id']
+        
+        print(f'{quantity} {item_id} added to basket')
+        Basket_item.add_item_to_basket(item_id, quantity)
         return redirect(url_for('home')) 
-    return render_template('home.html', items=Item.query.all(), form=form)
+    return render_template('home.html', items=Item.query.all())
 
 # gets the item that has been clicked on and sends user to item page which is now showing the information specific to that item 
 @app.route('/item', methods=['GET', 'POST'])
@@ -75,7 +81,7 @@ def item():
 
 @app.route('/basket', methods=['GET', 'POST'])
 def basket():
-    return render_template('basket.html')
+    return render_template('basket.html', basket=Basket_item.query.all())
 
 
 if __name__ == '__main__':

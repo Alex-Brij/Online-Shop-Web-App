@@ -17,5 +17,10 @@
     </nav>
 
     <p>This is the basket</p>
+
+    {% for item in basket %}
+    <p>{{item.item_id}}, {{item.quantity}}</p>
+    {% endfor %}
+
 </body>
 </html>
