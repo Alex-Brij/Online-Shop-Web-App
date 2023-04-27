@@ -54,6 +54,12 @@ class Basket_item(db.Model):
         db.session.add(item)
         db.session.commit()
         return item
+    
+    def remove_item_from_basket(item_id):
+        item = Basket_item(item_id = item_id)
+        Basket_item.query.filter_by(item_id=item_id).delete()
+        db.session.commit()
+        return item
 
 
 
@@ -81,6 +87,11 @@ def item():
 
 @app.route('/basket', methods=['GET', 'POST'])
 def basket():
+    if request.method == 'POST':
+        item_id = request.form['item_id']
+        print(f'{item_id} removed from basket')
+        Basket_item.remove_item_from_basket(item_id)
+        return redirect(url_for('basket'))
     return render_template('basket.html', basket=Basket_item.query.all())
 
 

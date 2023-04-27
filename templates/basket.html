@@ -20,6 +20,11 @@
 
     {% for item in basket %}
     <p>{{item.item_id}}, {{item.quantity}}</p>
+
+    <form method="post" action="{{ url_for('basket') }}">
+        <input type="hidden" name="item_id" value={{ item.id }}>
+        <input type="submit" value="Remove Item From Basket">
+    </form>
     {% endfor %}
 
 </body>
