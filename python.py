@@ -43,6 +43,7 @@ class Basket_item(db.Model):
     quantity = db.Column(db.Integer)
 
 
+# method to add item to basket
     def add_item_to_basket(item_id, quantity):
         exists = db.session.query(db.exists().where(Basket_item.item_id == item_id)).scalar()
         if exists:
@@ -59,7 +60,8 @@ class Basket_item(db.Model):
         db.session.commit()
         return item
     
-    
+
+# method to change quantity of items in basket 
     def change_quantity(item_id, quantity):
         if int(quantity) > 0:
             item = Basket_item.query.filter_by(item_id=item_id).first()
@@ -68,14 +70,6 @@ class Basket_item(db.Model):
             Basket_item.query.filter_by(item_id=item_id).delete()
 
         db.session.commit()
-
-
-    def remove_item_from_basket(item_id):
-        #item = Basket_item(item_id = item_id)
-        Basket_item.query.filter_by(item_id=item_id).delete()
-        db.session.commit()
-        #return item
-
 
 
 # renders home page with all items from database
@@ -104,8 +98,6 @@ def basket():
     if request.method == 'POST':
         item_id = request.form['item_id']
         quantity = request.form['quantity']
-        print(f'{item_id} removed from basket')
-        #Basket_item.remove_item_from_basket(item_id)
         Basket_item.change_quantity(item_id, quantity)
         return redirect(url_for('basket'))
     return render_template('basket.html', basket=Basket_item.query.all(), Item=Item)
