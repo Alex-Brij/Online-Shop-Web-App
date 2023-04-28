@@ -1,9 +1,11 @@
 from flask import Flask, render_template, session, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, IntegerField, HiddenField
-from wtforms.validators import InputRequired
+from wtforms import SubmitField, IntegerField, HiddenField, StringField, PasswordField, BooleanField
+from wtforms.validators import InputRequired, Length
 from flask_bootstrap import Bootstrap
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 app = Flask(__name__)
@@ -11,7 +13,80 @@ app.config['SECRET_KEY'] = 'lily!'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
 db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
+# initialise main class of flask_login- LoginManager, stored in lm global variable
+lm = LoginManager(app)
+# needs to know where login page is. Sends login view to endpoint name of login route (name of function that handles that request)
+# in this case function is called login
+lm.login_view = 'login'
 app.app_context().push()
+
+class LoginForm(FlaskForm):
+    username = StringField('Username', validators=[InputRequired(), Length(1, 16)])
+    password = PasswordField('Password', validators=[InputRequired()])
+    remember_me = BooleanField('Remember me')
+    submit = SubmitField('Submit')
+
+
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(16), index=True, unique=True)
+    password_hash = db.Column(db.String(64))
+    # like saying:  Users join Chatlog on users.id = chatlog.user_id
+    # each user can make multiple posts
+    # posts = db.Relationship("ChatLog",backref="user")
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    @staticmethod
+    def register(username, password):
+        user = User(username=username)
+        user.set_password(password)
+        db.session.add(user)
+        db.session.commit()
+        return user
+
+    def __repr__(self):
+        return '<User {0}>'.format(self.username)
+    
+@lm.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.verify_password(form.password.data):
+            return redirect(url_for('login', **request.args))
+        login_user(user, form.remember_me.data)
+        session['userid']=user.id
+        return redirect(request.args.get('next') or url_for('home'))
+    return render_template('login.html', form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+
+
+
+
+
+
+
+
+
+
 
 # table to hold items
 class Item(db.Model):
@@ -109,4 +184,9 @@ if __name__ == '__main__':
         Item.add_item('table', 'wooden thing to hold plates', 100, 'table.jpg')
     if Item.query.filter_by(name='chair').first() is None:
         Item.add_item('chair', 'wooden thing to sit on', 50, 'chair.jpg')
+
+    if User.query.filter_by(username='lily').first() is None:
+        User.register('lily', 'eye')
+    if User.query.filter_by(username='al').first() is None:
+        User.register('al', 'cat')
     app.run(debug=True)

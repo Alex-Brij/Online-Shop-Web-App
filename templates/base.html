@@ -1,0 +1,23 @@
+{% import "bootstrap/wtf.html" as wtf %}
+
+<nav>
+    <div >
+        <ul>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('basket') }}">Basket</a></li>
+            <li>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}">Login</a>
+                {% endif %}
+            </li>
+        </ul>>
+    </div>
+</nav>
+
+{% block content %}
+    <div>
+        {% block page_content %}{% endblock %}
+    </div>
+{% endblock %}

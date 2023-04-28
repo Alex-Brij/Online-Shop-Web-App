@@ -1,5 +1,5 @@
 {% import "bootstrap/wtf.html" as wtf %}
-
+{% extends "base.html" %}
 
 <!DOCTYPE html>
 
@@ -12,12 +12,8 @@
 </head>
 
 
-<body>
 
-    <nav class="menu">
-        <a href="{{ url_for('home') }}">Home</a>
-        <a href="{{ url_for('basket') }}">Basket</a>
-    </nav>
+{% block page_content %}
 
     <h1>Below is a list of the products availaible to buy</h1>
 
@@ -32,6 +28,5 @@
     </form>
     {% endfor %}
 
-
-</body>
+{% endblock %}
 </html>
