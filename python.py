@@ -169,6 +169,7 @@ def item():
 
 
 @app.route('/basket', methods=['GET', 'POST'])
+@login_required
 def basket():
     if request.method == 'POST':
         item_id = request.form['item_id']
