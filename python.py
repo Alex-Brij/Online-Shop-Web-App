@@ -22,7 +22,6 @@ class Item(db.Model):
     price = db.Column(db.Integer)
     environmental_impact = db.Column(db.Integer)
     image = db.Column(db.String)
-    #cart = db.relationship('Basket_item', backref="cart", lazy=True)
 
 # method to add an item to the table
     @staticmethod
