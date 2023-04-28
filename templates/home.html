@@ -26,9 +26,9 @@
     <p>{{item.name}}, {{item.description}}, {{item.price}} <a href="{{ url_for('item', type=item.name) }}"> <img src="{{ url_for('static', filename='images/' + item.image)}}" height="300" width="300"/> </a> </p>
     
     <form method="post" action="{{ url_for('home') }}">
-        <input type="text" name="quantity">
+        <input type="number" name="quantity" value="1">
         <input type="hidden" name="item_id" value="{{ item.id }}">
-        <input type="submit" value="Submit">
+        <input type="submit" value="Add to Basket">
     </form>
     {% endfor %}
 
