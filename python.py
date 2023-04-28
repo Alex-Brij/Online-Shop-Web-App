@@ -59,6 +59,18 @@ class Basket_item(db.Model):
         db.session.commit()
         return item
     
+    
+    def change_quantity(item_id, quantity):
+        if int(quantity) > 0:
+            item = Basket_item.query.filter_by(item_id=item_id).first()
+            Basket_item.query.filter_by(item_id=item_id).delete()
+            item = Basket_item(item_id=item_id, quantity=int(quantity))
+            db.session.add(item)
+        else:
+            Basket_item.query.filter_by(item_id=item_id).delete()
+
+        db.session.commit()
+
 
     def remove_item_from_basket(item_id):
         #item = Basket_item(item_id = item_id)
@@ -93,8 +105,10 @@ def item():
 def basket():
     if request.method == 'POST':
         item_id = request.form['item_id']
+        quantity = request.form['quantity']
         print(f'{item_id} removed from basket')
-        Basket_item.remove_item_from_basket(item_id)
+        #Basket_item.remove_item_from_basket(item_id)
+        Basket_item.change_quantity(item_id, quantity)
         return redirect(url_for('basket'))
     return render_template('basket.html', basket=Basket_item.query.all(), Item=Item)
 
