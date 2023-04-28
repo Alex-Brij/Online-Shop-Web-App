@@ -63,9 +63,7 @@ class Basket_item(db.Model):
     def change_quantity(item_id, quantity):
         if int(quantity) > 0:
             item = Basket_item.query.filter_by(item_id=item_id).first()
-            Basket_item.query.filter_by(item_id=item_id).delete()
-            item = Basket_item(item_id=item_id, quantity=int(quantity))
-            db.session.add(item)
+            item.quantity = int(quantity)
         else:
             Basket_item.query.filter_by(item_id=item_id).delete()
 
