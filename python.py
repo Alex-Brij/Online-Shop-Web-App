@@ -96,7 +96,7 @@ def basket():
         print(f'{item_id} removed from basket')
         Basket_item.remove_item_from_basket(item_id)
         return redirect(url_for('basket'))
-    return render_template('basket.html', basket=Basket_item.query.all())
+    return render_template('basket.html', basket=Basket_item.query.all(), Item=Item)
 
 
 if __name__ == '__main__':

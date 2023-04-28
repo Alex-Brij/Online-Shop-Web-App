@@ -19,7 +19,8 @@
     <p>This is the basket</p>
 
     {% for item in basket %}
-    <p>{{item.item_id}}, {{item.quantity}}</p>
+    {% set item_information = Item.query.get(item.item_id) %}
+    <p>{{item_information.name}}, {{item_information.description}}, {{item_information.price}} <a href="{{ url_for('item', type=item_information.name) }}"> <img src="{{ url_for('static', filename='images/' + item_information.image)}}" height="300" width="300"/> </a> Item Quantity: {{item.quantity}} </p>
 
     <form method="post" action="{{ url_for('basket') }}">
         <input type="hidden" name="item_id" value="{{ item.item_id }}">
