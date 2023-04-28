@@ -13,22 +13,16 @@ db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
 app.app_context().push()
 
-# creates form to add certain quantity of an item to basket
-# class AddItem(FlaskForm):
-#     quantity = IntegerField('Quantity', validators=[InputRequired()])
-#     item_id = HiddenField()
-#     submit = SubmitField('Submit')
-
-
 # table to hold items
 class Item(db.Model):
     __tablename__ = 'items'
-    id = db.Column(db.Integer, db.ForeignKey('basket.item_id'))
-    name = db.Column(db.String, primary_key=True, index=True, unique=True)
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
     description = db.Column(db.String)
     price = db.Column(db.Integer)
     environmental_impact = db.Column(db.Integer)
     image = db.Column(db.String)
+    #cart = db.relationship('Basket_item', backref="cart", lazy=True)
 
 # method to add an item to the table
     @staticmethod
@@ -46,21 +40,32 @@ class Item(db.Model):
 class Basket_item(db.Model):
     __tablename__ = 'basket'
     id = db.Column(db.Integer, primary_key=True)
-    item_id = db.Column(db.Integer)#, db.ForeignKey('items.id'))
+    item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
     quantity = db.Column(db.Integer)
 
+
     def add_item_to_basket(item_id, quantity):
-        item = Basket_item(item_id=item_id, quantity=quantity)
-        db.session.add(item)
+        exists = db.session.query(db.exists().where(Basket_item.item_id == item_id)).scalar()
+        if exists:
+            item = Basket_item.query.filter_by(item_id=item_id).first()
+            old_quantity = item.quantity
+            new_quantity = old_quantity + int(quantity)
+            Basket_item.query.filter_by(item_id=item_id).delete()
+            item = Basket_item(item_id=item_id, quantity=int(new_quantity))
+            db.session.add(item) 
+        else:
+            item = Basket_item(item_id=item_id, quantity=int(quantity))
+            db.session.add(item)
+
         db.session.commit()
         return item
     
+
     def remove_item_from_basket(item_id):
-        item = Basket_item(item_id = item_id)
+        #item = Basket_item(item_id = item_id)
         Basket_item.query.filter_by(item_id=item_id).delete()
         db.session.commit()
-        return item
-
+        #return item
 
 
 

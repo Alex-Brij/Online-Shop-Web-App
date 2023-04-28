@@ -27,7 +27,7 @@
     
     <form method="post" action="{{ url_for('home') }}">
         <input type="text" name="quantity">
-        <input type="hidden" name="item_id" value={{ item.id }}>
+        <input type="hidden" name="item_id" value="{{ item.id }}">
         <input type="submit" value="Submit">
     </form>
     {% endfor %}
