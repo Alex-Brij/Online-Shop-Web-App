@@ -132,7 +132,7 @@ class Basket_item(db.Model):
 # method to change quantity of items in basket 
     def change_quantity(item_id, quantity, current_user):
         if int(quantity) > 0:
-            item = Basket_item.query.filter_by(item_id=item_id, user_id = current_user).first()
+            item = Basket_item.query.filter_by(item_id=item_id, user_id=current_user).first()
             item.quantity = int(quantity)
         else:
             Basket_item.query.filter_by(item_id=item_id, user_id=current_user).delete()
@@ -186,7 +186,17 @@ def basket():
         quantity = request.form['quantity']
         Basket_item.change_quantity(item_id, quantity, session['userid'])
         return redirect(url_for('basket'))
-    return render_template('basket.html', basket=Basket_item.query.filter_by(user_id = session['userid']), Item=Item)
+    
+    basket = Basket_item.query.filter_by(user_id = session['userid']).all()
+    total_price = 0
+
+    for item in basket:
+        item_price = Item.query.get(item.item_id).price
+        item_quantity = item.quantity
+        overall_price = item_price * item_quantity
+        total_price += overall_price
+
+    return render_template('basket.html', basket=Basket_item.query.filter_by(user_id = session['userid']), Item=Item, total_price=total_price)
 
 
 @app.route('/checkout', methods=['GET', 'POST'])
