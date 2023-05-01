@@ -76,7 +76,6 @@ def logout():
     return redirect(url_for('home'))
 
 
-
 # table to hold items
 class Item(db.Model):
     __tablename__ = 'items'
