@@ -32,9 +32,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(16), index=True, unique=True)
     password_hash = db.Column(db.String(64))
-    # like saying:  Users join Chatlog on users.id = chatlog.user_id
-    # each user can make multiple posts
-    # posts = db.Relationship("ChatLog",backref="user")
+
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -79,15 +77,6 @@ def logout():
 
 
 
-
-
-
-
-
-
-
-
-
 # table to hold items
 class Item(db.Model):
     __tablename__ = 'items'
@@ -116,20 +105,21 @@ class Basket_item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
     quantity = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
 # method to add item to basket
-    def add_item_to_basket(item_id, quantity):
-        exists = db.session.query(db.exists().where(Basket_item.item_id == item_id)).scalar()
+    def add_item_to_basket(item_id, quantity, current_user):
+        exists = db.session.query(db.exists().where((Basket_item.item_id == item_id) & (Basket_item.user_id == current_user))).scalar()
         if exists:
-            item = Basket_item.query.filter_by(item_id=item_id).first()
+            item = Basket_item.query.filter_by(item_id=item_id, user_id=current_user).first()
             old_quantity = item.quantity
             new_quantity = old_quantity + int(quantity)
-            Basket_item.query.filter_by(item_id=item_id).delete()
-            item = Basket_item(item_id=item_id, quantity=int(new_quantity))
+            Basket_item.query.filter_by(item_id=item_id, user_id=current_user).delete()
+            item = Basket_item(item_id=item_id, quantity=int(new_quantity), user_id = current_user)
             db.session.add(item) 
         else:
-            item = Basket_item(item_id=item_id, quantity=int(quantity))
+            item = Basket_item(item_id=item_id, quantity=int(quantity), user_id = current_user)
             db.session.add(item)
 
         db.session.commit()
@@ -137,12 +127,12 @@ class Basket_item(db.Model):
     
 
 # method to change quantity of items in basket 
-    def change_quantity(item_id, quantity):
+    def change_quantity(item_id, quantity, current_user):
         if int(quantity) > 0:
-            item = Basket_item.query.filter_by(item_id=item_id).first()
+            item = Basket_item.query.filter_by(item_id=item_id, user_id = current_user).first()
             item.quantity = int(quantity)
         else:
-            Basket_item.query.filter_by(item_id=item_id).delete()
+            Basket_item.query.filter_by(item_id=item_id, user_id=current_user).delete()
 
         db.session.commit()
 
@@ -154,11 +144,11 @@ def home():
     if request.method == 'POST':
         quantity = request.form['quantity']
         item_id = request.form['item_id']
-        
         print(f'{quantity} {item_id} added to basket')
-        Basket_item.add_item_to_basket(item_id, quantity)
+        Basket_item.add_item_to_basket(item_id, quantity, session['userid'])
         return redirect(url_for('home')) 
     return render_template('home.html', items=Item.query.all())
+
 
 # gets the item that has been clicked on and sends user to item page which is now showing the information specific to that item 
 @app.route('/item', methods=['GET', 'POST'])
@@ -174,9 +164,10 @@ def basket():
     if request.method == 'POST':
         item_id = request.form['item_id']
         quantity = request.form['quantity']
-        Basket_item.change_quantity(item_id, quantity)
+        Basket_item.change_quantity(item_id, quantity, session['userid'])
         return redirect(url_for('basket'))
-    return render_template('basket.html', basket=Basket_item.query.all(), Item=Item)
+    return render_template('basket.html', basket=Basket_item.query.filter_by(user_id = session['userid']), Item=Item)
+
 
 
 if __name__ == '__main__':
