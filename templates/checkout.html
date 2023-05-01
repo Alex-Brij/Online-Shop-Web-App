@@ -11,6 +11,11 @@
     <title>Home</title>
 </head>
 
-<p>This is the checkout</p>
+{% block page_content %}
+
+    <p>This is the checkout</p>
+    <p>Total price of items in Basket is: {{total_price}}</p>
+
+{% endblock %}
 
 </html>

@@ -187,14 +187,7 @@ def basket():
         Basket_item.change_quantity(item_id, quantity, session['userid'])
         return redirect(url_for('basket'))
     
-    basket = Basket_item.query.filter_by(user_id = session['userid']).all()
-    total_price = 0
-
-    for item in basket:
-        item_price = Item.query.get(item.item_id).price
-        item_quantity = item.quantity
-        overall_price = item_price * item_quantity
-        total_price += overall_price
+    total_price = calculate_total_price()
 
     return render_template('basket.html', basket=Basket_item.query.filter_by(user_id = session['userid']), Item=Item, total_price=total_price)
 
@@ -202,9 +195,21 @@ def basket():
 @app.route('/checkout', methods=['GET', 'POST'])
 @login_required
 def checkout():
+    total_price = calculate_total_price()
 
-    return render_template('checkout.html')
+    return render_template('checkout.html', total_price=total_price)
 
+
+def calculate_total_price():
+    basket = Basket_item.query.filter_by(user_id = session['userid']).all()
+    total_price = 0
+    for item in basket:
+        item_price = Item.query.get(item.item_id).price
+        item_quantity = item.quantity
+        overall_price = item_price * item_quantity
+        total_price += overall_price
+
+    return total_price
 
 
 if __name__ == '__main__':
