@@ -2,7 +2,7 @@ from flask import Flask, render_template, session, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, IntegerField, HiddenField, StringField, PasswordField, BooleanField, SelectField
-from wtforms.validators import InputRequired, Length
+from wtforms.validators import InputRequired, Length, NumberRange, ValidationError
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -29,6 +29,25 @@ class LoginForm(FlaskForm):
 class SortingForm(FlaskForm):
     order = SelectField('Sort By', choices=[('Name'), ('Price'), ('Environmental Impact')])
     submit = SubmitField('Sort')
+
+class CheckoutForm(FlaskForm):
+    # def validate_cardnumber(form, field):
+    #     text = str(field.data)
+    #     if len(text) != 16:
+    #         raise ValidationError('Card number must be 16 digits long')
+        
+    # def validate_cvc(form, field):
+    #     text = str(field.data)
+    #     if len(text) != 3:
+    #         raise ValidationError('CVC must be 3 digits long')
+                
+    name = StringField('Name on Card', validators=[InputRequired(), Length(1, 32)])
+    cardnumber = IntegerField('Card Number', validators=[InputRequired()])
+    expiry_date_month = SelectField('Expiry Month', choices=list(range(1, 13)))
+    expiry_date_year = SelectField('Expiry Year', choices=list(range(2023, 2034)))
+    cvc = IntegerField('CVC', validators=[InputRequired()])
+    Checkout = SubmitField('Checkout and Pay')
+
 
 
 class User(UserMixin, db.Model):
@@ -195,9 +214,29 @@ def basket():
 @app.route('/checkout', methods=['GET', 'POST'])
 @login_required
 def checkout():
+    form = CheckoutForm()
+    if form.validate_on_submit():
+        #db.session.query(Basket_item.query.filter_by(user_id = session['userid'])).delete()
+        # db.session.query(Basket_item).filter(user_id = session['userid']).delete()
+
+        # db.session.commit
+
+
+        #Basket_item.query.filter_by(user_id = session['userid']).delete()
+        return redirect(url_for('payment_taken'))
+        
+    
+
     total_price = calculate_total_price()
 
-    return render_template('checkout.html', total_price=total_price)
+    return render_template('checkout.html', total_price=total_price, form=form)
+
+
+@app.route('/payment_taken', methods=['GET', 'POST'])
+@login_required
+def payment_taken():
+
+    return render_template('payment_taken.html')
 
 
 def calculate_total_price():
