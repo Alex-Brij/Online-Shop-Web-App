@@ -28,7 +28,7 @@ class LoginForm(FlaskForm):
 
 class SortingForm(FlaskForm):
     order = SelectField('Sort By', choices=[('Name'), ('Price'), ('Environmental Impact')])
-    submit = SubmitField('Submit')
+    submit = SubmitField('Sort')
 
 
 class User(UserMixin, db.Model):
@@ -92,8 +92,8 @@ class Item(db.Model):
 
 # method to add an item to the table
     @staticmethod
-    def add_item(name, description, price, image):
-        item = Item(name=name, description=description, price=price, image=image)
+    def add_item(name, description, price, image, environmental_impact):
+        item = Item(name=name, description=description, price=price, image=image, environmental_impact=environmental_impact)
         db.session.add(item)
         db.session.commit()
         return item
@@ -168,7 +168,13 @@ def home():
 @app.route('/item', methods=['GET', 'POST'])
 def item():
     selected_item = request.args.get('type')
-    print(selected_item)
+    #print(selected_item)
+    if request.method == 'POST':
+        quantity = request.form['quantity']
+        item_id = request.form['item_id']
+        print(f'{quantity} {item_id} added to basket')
+        Basket_item.add_item_to_basket(item_id, quantity, session['userid'])
+        return redirect(url_for('item')) 
     return render_template('item.html', item=Item.query.filter_by(name=selected_item).first())
 
 
@@ -194,9 +200,9 @@ def checkout():
 if __name__ == '__main__':
     db.create_all()
     if Item.query.filter_by(name='table').first() is None:
-        Item.add_item('table', 'wooden thing to hold plates', 50, 'table.jpg')
+        Item.add_item('table', 'wooden thing to hold plates', 50, 'table.jpg', 10)
     if Item.query.filter_by(name='chair').first() is None:
-        Item.add_item('chair', 'wooden thing to sit on', 100, 'chair.jpg')
+        Item.add_item('chair', 'wooden thing to sit on', 100, 'chair.jpg', 5)
 
     if User.query.filter_by(username='lily').first() is None:
         User.register('lily', 'eye')
