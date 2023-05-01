@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import SubmitField, IntegerField, HiddenField, StringField, PasswordField, BooleanField
+from wtforms import SubmitField, IntegerField, HiddenField, StringField, PasswordField, BooleanField, SelectField
 from wtforms.validators import InputRequired, Length
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
@@ -24,6 +24,10 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(1, 16)])
     password = PasswordField('Password', validators=[InputRequired()])
     remember_me = BooleanField('Remember me')
+    submit = SubmitField('Submit')
+
+class SortingForm(FlaskForm):
+    order = SelectField('Sort By', choices=[('Name'), ('Price'), ('Environmental Impact')])
     submit = SubmitField('Submit')
 
 
@@ -140,13 +144,24 @@ class Basket_item(db.Model):
 # if number entered in form for adding items to bsket it gets the number and prints it
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    if request.method == 'POST':
+    form = SortingForm()
+    items = Item.query.all()
+    if form.validate_on_submit():
+        if form.order.data == 'Name':
+            items = Item.query.order_by(Item.name).all()
+        elif form.order.data == 'Price':
+            items = Item.query.order_by(Item.price).all()
+        elif form.order.data == 'Environmental Impact':
+            items = Item.query.order_by(Item.environmental_impact).all()
+
+    elif request.method == 'POST':
         quantity = request.form['quantity']
         item_id = request.form['item_id']
         print(f'{quantity} {item_id} added to basket')
         Basket_item.add_item_to_basket(item_id, quantity, session['userid'])
         return redirect(url_for('home')) 
-    return render_template('home.html', items=Item.query.all())
+    
+    return render_template('home.html',form=form, items=items)
 
 
 # gets the item that has been clicked on and sends user to item page which is now showing the information specific to that item 
@@ -168,13 +183,20 @@ def basket():
     return render_template('basket.html', basket=Basket_item.query.filter_by(user_id = session['userid']), Item=Item)
 
 
+@app.route('/checkout', methods=['GET', 'POST'])
+@login_required
+def checkout():
+
+    return render_template('checkout.html')
+
+
 
 if __name__ == '__main__':
     db.create_all()
     if Item.query.filter_by(name='table').first() is None:
-        Item.add_item('table', 'wooden thing to hold plates', 100, 'table.jpg')
+        Item.add_item('table', 'wooden thing to hold plates', 50, 'table.jpg')
     if Item.query.filter_by(name='chair').first() is None:
-        Item.add_item('chair', 'wooden thing to sit on', 50, 'chair.jpg')
+        Item.add_item('chair', 'wooden thing to sit on', 100, 'chair.jpg')
 
     if User.query.filter_by(username='lily').first() is None:
         User.register('lily', 'eye')
