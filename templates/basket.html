@@ -20,7 +20,7 @@
 
     <form method="post" action="{{ url_for('basket') }}">
         <input type="hidden" name="item_id" value="{{ item.item_id }}">
-        <input type="number" name="quantity" min="0" value="{{item.quantity}}">
+        <input type="number" class="quantity" name="quantity" min="0" value="{{item.quantity}}">
         <input type="submit" value="Set Quantity">
     </form>
     {% endfor %}

@@ -89,12 +89,23 @@ ul {
 
   /* SUBMIT BUTTONS */
   input[type=submit] {
-    background-color: #04AA6D;
+    background-color: #5b6361;
     border: none;
     color: white;
-    padding: 16px 32px;
+    padding: 8px 8px;
     text-decoration: none;
     margin: 4px 2px;
     cursor: pointer;
+  }
+
+  /* INPUT BOXES */
+  input {
+    border: 2px solid black;
+    border-radius: 4px;
+  }
+
+  .quantity {
+    width: 50px;
+
   }
   

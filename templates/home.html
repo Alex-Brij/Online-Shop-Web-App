@@ -17,14 +17,12 @@
 
     {{ wtf.quick_form(form) }}
 
-    <h1>Below is a list of the products availaible to buy</h1>
-
     <!-- for each item in the datbase displays the item along with a link that will go to the item page and display information about which ever item has been clicked  -->
     {% for item in items %}
     <p>{{item.name}}, {{item.description}}, {{item.price}}, {{item.environmental_impact}} <a href="{{ url_for('item', type=item.name) }}"> <img src="{{ url_for('static', filename='images/' + item.image)}}" height="300" width="300"/> </a> </p>
     
     <form method="post" action="{{ url_for('home') }}">
-        <input type="number" name="quantity" min="1" value="1">
+        <input type="number" class="quantity" name="quantity" min="1" value="1">
         <input type="hidden" name="item_id" value="{{ item.id }}">
         <input type="submit" value="Add to Basket">
     </form>
