@@ -28,7 +28,6 @@ class LoginForm(FlaskForm):
 
 class SortingForm(FlaskForm):
     order = SelectField('Sort By', choices=[('Name'), ('Price'), ('Environmental Impact')])
-    submit = SubmitField('Sort')
 
 class CheckoutForm(FlaskForm):               
     name = StringField('Name on Card', validators=[InputRequired(), Length(1, 32)])
