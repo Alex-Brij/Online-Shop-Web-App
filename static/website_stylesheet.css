@@ -4,11 +4,11 @@ body {
 
 
 /* this is a _demo_ container. remember the importance of relative and absolute positioning */
-/* .tooltip-container {
+.tooltip-container {
     position: relative;
     display: flex;
     place-content: left;
-} */
+}
 
 /* styling of the tooltip display */
 p#tooltip-text {

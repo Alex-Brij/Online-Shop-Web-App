@@ -2,7 +2,7 @@ from flask import Flask, render_template, session, request, url_for, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, IntegerField, HiddenField, StringField, PasswordField, BooleanField, SelectField
-from wtforms.validators import InputRequired, Length, NumberRange, ValidationError
+from wtforms.validators import InputRequired, Length, NumberRange, ValidationError, Regexp
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
