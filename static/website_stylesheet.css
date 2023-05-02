@@ -1,5 +1,5 @@
 body {
-    background-color: rgb(122, 130, 133);
+    background-color: rgb(255, 255, 255);
   }
 
 
@@ -43,3 +43,58 @@ p#tooltip-text:before {
    opacity: 1;
  }
 }
+
+
+
+/* STYLING */
+body {
+font-family: Arial, sans-serif; }
+
+/* NAVBAR */
+
+ul {
+    list-style-type: none;
+    margin-bottom: 15px;
+    margin-top: -10px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding: 10px;
+    overflow: hidden;
+    background-color: #333;
+  }
+  
+  li {
+    float: left;
+  }
+  
+  li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    font-size: 150%;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  /* Change the link color to #111 (black) on hover */
+  li a:hover {
+    background-color: #111;
+  }
+
+  .active {
+    background-color: #04AA6D;
+  }
+
+
+  /* SUBMIT BUTTONS */
+  input[type=submit] {
+    background-color: #04AA6D;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+  

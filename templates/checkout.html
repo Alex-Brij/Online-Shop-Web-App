@@ -24,8 +24,7 @@
 
             {{ form.name.label }}
             {{ form.name }}
-            <p id="tooltip-text">Please enter the name on you credit card.</p>
-
+            <p data-tooltip="popup" class="hover-tooltip">Please enter the name on your card</p>
             {% if form.name.errors %}
             {% for error in form.name.errors %}
             <p>{{ error }}</p>
@@ -35,7 +34,7 @@
 
             {{ form.cardnumber.label }}
             {{ form.cardnumber }}
-
+            <p data-tooltip="popup2" class="hover-tooltip">Please enter your card number</p>
             {% if form.cardnumber.errors %}
             {% for error in form.cardnumber.errors %}
             <p>{{ error }}</p>
@@ -45,16 +44,18 @@
 
             {{ form.expiry_date_month.label }}
             {{ form.expiry_date_month }}
+            <p data-tooltip="popup3" class="hover-tooltip">Please enter the month your card expires</p>
             <br>
 
             {{ form.expiry_date_year.label }}
             {{ form.expiry_date_year }}
+            <p data-tooltip="popup4" class="hover-tooltip">Please enter the year your card expires</p>
             <br>
 
             
             {{ form.cvc.label }}
             {{ form.cvc }}
-
+            <p data-tooltip="popup5" class="hover-tooltip">Please enter your card verification code (CVC)</p>
             {% if form.cvc.errors %}
             {% for error in form.cvc.errors %}
             <p>{{ error }}</p>
@@ -65,10 +66,9 @@
             <input type=submit value="Checkout and Pay">
 
         </form>
-
-
-
     </div>
+
+    <div class="div-tooltip"></div>
 
     <!-- {{ wtf.quick_form(form) }} -->
 
