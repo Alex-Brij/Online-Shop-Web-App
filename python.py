@@ -24,30 +24,23 @@ class LoginForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(1, 16)])
     password = PasswordField('Password', validators=[InputRequired()])
     remember_me = BooleanField('Remember me')
-    submit = SubmitField('Submit')
+    submit = SubmitField('Login')
 
 class SortingForm(FlaskForm):
     order = SelectField('Sort By', choices=[('Name'), ('Price'), ('Environmental Impact')])
     submit = SubmitField('Sort')
 
-class CheckoutForm(FlaskForm):
-    # def validate_cardnumber(form, field):
-    #     text = str(field.data)
-    #     if len(text) != 16:
-    #         raise ValidationError('Card number must be 16 digits long')
-        
-    # def validate_cvc(form, field):
-    #     text = str(field.data)
-    #     if len(text) != 3:
-    #         raise ValidationError('CVC must be 3 digits long')
-                
+class CheckoutForm(FlaskForm):               
     name = StringField('Name on Card', validators=[InputRequired(), Length(1, 32)])
     cardnumber = StringField('Card Number', validators=[Regexp(r'^[0-9]{16}$', message='Please Enter a 16 Digit Numer')])
     expiry_date_month = SelectField('Expiry Month', choices=list(range(1, 13)))
     expiry_date_year = SelectField('Expiry Year', choices=list(range(2023, 2034)))
     cvc = StringField('CVC', validators=[Regexp(r'^[0-9]{3}$', message='Please Enter a 3 Digit Numer')])
-    #Checkout = SubmitField('Checkout and Pay')
 
+class SignupForm(FlaskForm):
+    username = StringField('Username', validators=[InputRequired(), Length(1, 32)])
+    password = StringField('Password', validators=[InputRequired(), Length(1, 32)])
+    submit = SubmitField('Sign up')
 
 
 class User(UserMixin, db.Model):
@@ -97,6 +90,22 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = SignupForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        
+        if User.query.filter_by(username=username).first() is None:
+            User.register(username, password)
+            return redirect(url_for('home'))
+
+        else:
+            return render_template('signup.html', form=form, exists=True)
+
+    return render_template('signup.html', form=form)
 
 
 # table to hold items
@@ -262,8 +271,8 @@ if __name__ == '__main__':
     if Item.query.filter_by(name='chair').first() is None:
         Item.add_item('chair', 'wooden thing to sit on', 100, 'chair.jpg', 5)
 
-    if User.query.filter_by(username='lily').first() is None:
-        User.register('lily', 'eye')
-    if User.query.filter_by(username='al').first() is None:
-        User.register('al', 'cat')
+    # if User.query.filter_by(username='lily').first() is None:
+    #     User.register('lily', 'eye')
+    # if User.query.filter_by(username='al').first() is None:
+    #     User.register('al', 'cat')
     app.run(debug=True)
