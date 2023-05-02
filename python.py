@@ -4,7 +4,7 @@ from flask_wtf import FlaskForm
 from wtforms import SubmitField, IntegerField, HiddenField, StringField, PasswordField, BooleanField, SelectField
 from wtforms.validators import InputRequired, Length, NumberRange, ValidationError
 from flask_bootstrap import Bootstrap
-from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -46,7 +46,7 @@ class CheckoutForm(FlaskForm):
     expiry_date_month = SelectField('Expiry Month', choices=list(range(1, 13)))
     expiry_date_year = SelectField('Expiry Year', choices=list(range(2023, 2034)))
     cvc = IntegerField('CVC', validators=[InputRequired()])
-    Checkout = SubmitField('Checkout and Pay')
+    #Checkout = SubmitField('Checkout and Pay')
 
 
 
@@ -89,7 +89,7 @@ def login():
         login_user(user, form.remember_me.data)
         session['userid']=user.id
         return redirect(request.args.get('next') or url_for('home'))
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, status=current_user.is_authenticated)
 
 
 @app.route('/logout')
@@ -174,12 +174,16 @@ def home():
             items = Item.query.order_by(Item.environmental_impact).all()
 
     elif request.method == 'POST':
-        quantity = request.form['quantity']
-        item_id = request.form['item_id']
-        print(f'{quantity} {item_id} added to basket')
-        Basket_item.add_item_to_basket(item_id, quantity, session['userid'])
-        return redirect(url_for('home')) 
-    
+        print(current_user.is_authenticated)
+        if current_user.is_authenticated is False:
+            return redirect(url_for('login'))
+        else:
+            quantity = request.form['quantity']
+            item_id = request.form['item_id']
+            print(f'{quantity} {item_id} added to basket')
+            Basket_item.add_item_to_basket(item_id, quantity, session['userid'])
+            return redirect(url_for('home')) 
+        
     return render_template('home.html',form=form, items=items)
 
 

@@ -13,10 +13,50 @@
 
 {% block page_content %}
 
-    <p>This is the checkout</p>
-    {{ wtf.quick_form(form) }}
-    <p>Total price of items in Basket is: {{total_price}}</p>
+    <!-- <p>This is the checkout</p>
+    {{ wtf.quick_form(form, id="CheckoutForm") }}
+    <p>Total price of items in Basket is: {{total_price}}</p> -->
+
+
+    <div class="tooltip-container">
+        <form method=post>
+            {{ form.csrf_token }}
+
+            {{ form.name.label }}
+            {{ form.name }}
+            <p id="tooltip-text">Please enter the name on you credit card.</p>
+            <br>
+
+            {{ form.cardnumber.label }}
+            {{ form.cardnumber }}
+            <br>
+
+            {{ form.expiry_date_month.label }}
+            {{ form.expiry_date_month }}
+            <br>
+
+            {{ form.expiry_date_year.label }}
+            {{ form.expiry_date_year }}
+            <br>
+
+            
+            {{ form.cvc.label }}
+            {{ form.cvc }}
+            <br>
+
+            <input type=submit value="Checkout and Pay">
+
+        </form>
+
+
+
+    </div>
+
+    <!-- {{ wtf.quick_form(form) }} -->
+
 
 {% endblock %}
+
+
 
 </html>
