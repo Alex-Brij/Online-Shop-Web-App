@@ -229,13 +229,10 @@ def basket():
 def checkout():
     form = CheckoutForm()
     if form.validate_on_submit():
-        #db.session.query(Basket_item.query.filter_by(user_id = session['userid'])).delete()
-        # db.session.query(Basket_item).filter(user_id = session['userid']).delete()
+        basket = Basket_item.query.filter_by(user_id = session['userid'])
+        for item in basket:
+            Basket_item.change_quantity(item.item_id, 0, session['userid'])      
 
-        # db.session.commit
-
-
-        #Basket_item.query.filter_by(user_id = session['userid']).delete()
         return redirect(url_for('payment_taken'))
         
     
@@ -248,7 +245,6 @@ def checkout():
 @app.route('/payment_taken', methods=['GET', 'POST'])
 @login_required
 def payment_taken():
-
     return render_template('payment_taken.html')
 
 
