@@ -42,10 +42,10 @@ class CheckoutForm(FlaskForm):
     #         raise ValidationError('CVC must be 3 digits long')
                 
     name = StringField('Name on Card', validators=[InputRequired(), Length(1, 32)])
-    cardnumber = IntegerField('Card Number', validators=[InputRequired()])
+    cardnumber = StringField('Card Number', validators=[Regexp(r'^[0-9]{16}$', message='Please Enter a 16 Digit Numer')])
     expiry_date_month = SelectField('Expiry Month', choices=list(range(1, 13)))
     expiry_date_year = SelectField('Expiry Year', choices=list(range(2023, 2034)))
-    cvc = IntegerField('CVC', validators=[InputRequired()])
+    cvc = StringField('CVC', validators=[Regexp(r'^[0-9]{3}$', message='Please Enter a 3 Digit Numer')])
     #Checkout = SubmitField('Checkout and Pay')
 
 

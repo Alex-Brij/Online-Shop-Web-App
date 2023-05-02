@@ -25,10 +25,22 @@
             {{ form.name.label }}
             {{ form.name }}
             <p id="tooltip-text">Please enter the name on you credit card.</p>
+
+            {% if form.name.errors %}
+            {% for error in form.name.errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+            {% endif %}
             <br>
 
             {{ form.cardnumber.label }}
             {{ form.cardnumber }}
+
+            {% if form.cardnumber.errors %}
+            {% for error in form.cardnumber.errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+            {% endif %}
             <br>
 
             {{ form.expiry_date_month.label }}
@@ -42,6 +54,12 @@
             
             {{ form.cvc.label }}
             {{ form.cvc }}
+
+            {% if form.cvc.errors %}
+            {% for error in form.cvc.errors %}
+            <p>{{ error }}</p>
+            {% endfor %}
+            {% endif %}
             <br>
 
             <input type=submit value="Checkout and Pay">
