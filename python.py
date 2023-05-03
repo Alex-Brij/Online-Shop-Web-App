@@ -27,13 +27,13 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 class SortingForm(FlaskForm):
-    order = SelectField('Sort By', choices=[('Name'), ('Price'), ('Environmental Impact')])
+    order = SelectField('Sort By', choices=[('Name'), ('Price'), ('Environmental Impact')], render_kw={"class": "select_form"})
 
 class CheckoutForm(FlaskForm):               
     name = StringField('Name on Card', validators=[InputRequired(), Length(1, 32)])
     cardnumber = StringField('Card Number', validators=[Regexp(r'^[0-9]{16}$', message='Please Enter a 16 Digit Numer')])
-    expiry_date_month = SelectField('Expiry Month', choices=list(range(1, 13)))
-    expiry_date_year = SelectField('Expiry Year', choices=list(range(2023, 2034)))
+    expiry_date_month = SelectField('Expiry Month', choices=list(range(1, 13)), render_kw={"class": "select_form"})
+    expiry_date_year = SelectField('Expiry Year', choices=list(range(2023, 2034)), render_kw={"class": "select_form"})
     cvc = StringField('CVC', validators=[Regexp(r'^[0-9]{3}$', message='Please Enter a 3 Digit Numer')])
 
 class SignupForm(FlaskForm):
