@@ -99,7 +99,7 @@ def signup():
         
         if User.query.filter_by(username=username).first() is None:
             User.register(username, password)
-            return redirect(url_for('home'))
+            return redirect(url_for('login'))
 
         else:
             return render_template('signup.html', form=form, exists=True)
@@ -261,25 +261,30 @@ def calculate_total_price():
 
 if __name__ == '__main__':
     db.create_all()
-    # if Item.query.filter_by(name='table').first() is None:
-    #     Item.add_item('table', 'wooden thing to hold plates', 50, 'table.jpg', 10)
-    # if Item.query.filter_by(name='chair').first() is None:
-    #     Item.add_item('chair', 'wooden thing to sit on', 100, 'chair.jpg', 5)
-
     # if User.query.filter_by(username='lily').first() is None:
     #     User.register('lily', 'eye')
     # if User.query.filter_by(username='al').first() is None:
     #     User.register('al', 'cat')
 
     if Item.query.filter_by(name='Porsche Carrera GT').first() is None:
-        Item.add_item('Porsche Carrera GT', 'The Porsche Carrera GT is a ', 1149995, 'carrera_gt.png', 10)
+        Item.add_item('Porsche Carrera GT', 'The Porsche Carrera GT is a mid engined V10 sports car that was manufactured by Porsche in very limmited quantities '
+                    'between 2004 and 2006. It is widely considered one of the best drivers cars every made due to its chasis, V10 engine and 6-speed manual gearbox '
+                    'The carrera GT makes 603 hp and 435 lbs ft of torque, can do 0-60 mph in 3.5 seconds and has a top speed of 205mph.', 1149995, 'carrera_gt.png', 10)
     if Item.query.filter_by(name='Renault Clio V6').first() is None:
-        Item.add_item('Renault Clio V6', 'The Renault Clio V6 is a ', 59995, 'clio_v6.png', 6)
+        Item.add_item('Renault Clio V6', 'The Renault Clio V6 is a rear wheel drive hot hatch that was produced by Renault from 2001 to 2005 and (the phase 2) was at the time '
+                      'the most powerful production hot hatch in the world, making 252 bhp from its rear mid-mounted 2.9 litre V6 through a 6-speed manual gearbox. It had a reputation '
+                      'for tricky handling due to its short wheel base and the postion of the engine.', 59995, 'clio_v6.png', 6)
     if Item.query.filter_by(name='BMW E30 M3').first() is None:
-        Item.add_item('BMW E30 M3', 'The BMW E30 M3 is a ', 77950, 'e30_m3.png', 4)   
+        Item.add_item('BMW E30 M3', 'The E30 M3 is widely considered to be the best looking M3 ever and was the first M3- being manufactured by BMW from 1986 to 1991- meaning it birthed '
+                      'one of the best lines of sports cars ever. It had an inline 4 engine that made between 192 and 235 bhp depending on the model and was built as a homologation car to allow '
+                      'BMW to go racing in the DTM and Group A touring series. 18,000 E30 M3s were built and the race cars won over 1400 races.', 77950, 'e30_m3.png', 4)   
     if Item.query.filter_by(name='Mitsubishi Pajero Evolution').first() is None:
-        Item.add_item('Mitsubishi Pajero Evolution', 'The Mitsubishi Pajero Evolution is a ', 25848, 'pajero.png', 6)      
+        Item.add_item('Mitsubishi Pajero Evolution', 'The Mitsubishi Pajero Evolution is a homologation car that was built by Mitsubishi from 1997 to 1999 to allow it to race a race version in the Dakar Rally '
+                      '(A Rally form Paris in France to Dakar in Senegal), which it ended up winning the most times out of any car at a staggering 12. The road car made 275 bhp from its 3.5 litre V6 and featured '
+                      'a spoiler, hood scoop, skid plate and mudflaps; inherited from the offroad version.', 25848, 'pajero.png', 6)      
     if Item.query.filter_by(name='Audi Quattro Rally').first() is None:
-        Item.add_item('Audi Quattro Rally', 'The Audi Quattro is a ', 127232, 'quattro.png', 6)   
+        Item.add_item('Audi Quattro Rally', 'The Audi Quattro is a 4 wheel drive homolgation car made by Audi from 1980 to 1991, and which became one of the most famous rally cars of all time. There were many different '
+                      'versions of the Quattro (which translates to four in Italian- and represents the cars 4 wheel drive), but they used a verion of Audis inline 5, paired with a 6-speed manual transmission. Rally versions '
+                      'of the car competed in Group B rallies and have won 23 world champioship rallies.', 127232, 'quattro.png', 6)   
     
     app.run(debug=True)

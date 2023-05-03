@@ -74,11 +74,12 @@ ul {
     color: rgb(196, 197, 197);
     text-align: center;
     padding: 14px 16px;
-    font-size: 150%;
-    font-weight: bold;
+    font-size: 200%;
+    font-weight: lighter;
+    font-stretch:extra-condensed;
     text-decoration: none;
   }
-  
+    
   /* Change the link color to #111 (black) on hover */
   li a:hover {
     background-color: #111;
@@ -87,6 +88,29 @@ ul {
   .active {
     background-color: #04AA6D;
   }
+
+
+  /* logo */
+  div.logo {
+    text-align: center;
+  }
+  
+  ul.logo_ul {
+    display: inline-block;
+    text-align: left;
+  }
+
+  li.logo-test {
+    margin-top: -20px;
+    margin-bottom: -45px;
+  }
+
+  li.profile-test {
+    margin-top: -5px;
+    margin-bottom: -50px;
+    margin-right: -20px;
+  }
+
 
 
   /* SUBMIT BUTTONS */
@@ -138,3 +162,56 @@ ul {
     opacity: 60%;
     width: 100%;
   }
+
+
+  /* Items on home page */
+
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+  }
+
+  .card-basket {
+    /* max-width: 20%; */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    margin: 5% 5%;
+    text-align: center;
+    font-family: arial;
+    /* display: inline-block; */
+    width: 40%;
+    float: left;
+  }
+  
+  .price {
+    color: grey;
+    font-size: 22px;
+  }
+  
+  .add_basket {
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+  }
+  
+  .add_basket:hover {
+    opacity: 0.7;
+  }
+
+  .basket-container {
+
+  }
+
+  #basket-checkout {
+    position: absolute;
+    top: 100;
+    margin: 50px 50px;
+
+  } 

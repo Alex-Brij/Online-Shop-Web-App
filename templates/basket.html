@@ -12,20 +12,24 @@
 
 {% block page_content %}
 
-    <p>This is the basket</p>
+<p id="checkout-basket">Total Price: {{total_price}} <a href="{{ url_for('checkout') }}" class="button-style">Checkout</a> </p>
 
     {% for item in basket %}
     {% set item_information = Item.query.get(item.item_id) %}
-    <p>{{item_information.name}}, {{item_information.description}}, {{item_information.price}} <a href="{{ url_for('item', type=item_information.name) }}"> <img src="{{ url_for('static', filename='images/' + item_information.image)}}"/> </a> Item Quantity: {{item.quantity}} </p>
 
-    <form method="post" action="{{ url_for('basket') }}">
-        <input type="hidden" name="item_id" value="{{ item.item_id }}">
-        <input type="number" class="quantity" name="quantity" min="0" value="{{item.quantity}}" required>
-        <input type="submit" value="Set Quantity">
-    </form>
+    <div class="card-basket">
+        <div><a href="{{ url_for('item', type=item_information.name) }}"> <img src="{{ url_for('static', filename='images/' + item_information.image)}}"/> </a></div>
+        <h1>{{item_information.name}}</h1>
+        <p class="price">£{{item_information.price}}</p>
+        <p>Environmental Impact: {{item_information.environmental_impact}}KgC/S</p>
+        
+        <form method="post" action="{{ url_for('basket') }}" class="add_basket">
+            <input type="hidden" name="item_id" value="{{ item.item_id }}">
+            <input type="number" class="quantity" name="quantity" min="0" value="{{item.quantity}}" required>
+            <input type="submit" value="Set Quantity">
+        </form>
+    </div>
     {% endfor %}
-    <p>The total Price of the items in your basket is: {{total_price}} </p>
-    <p><a href="{{ url_for('checkout') }}" class="button-style">Go to Checkout</a></p>
 
 {% endblock %}
 </html>
