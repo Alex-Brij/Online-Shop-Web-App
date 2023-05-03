@@ -29,7 +29,8 @@
 
     <!-- for each item in the datbase displays the item along with a link that will go to the item page and display information about which ever item has been clicked  -->
     {% for item in items %}
-    <p>{{item.name}}, {{item.description}}, {{item.price}}, {{item.environmental_impact}} <a href="{{ url_for('item', type=item.name) }}"> <img src="{{ url_for('static', filename='images/' + item.image)}}" height="300" width="300"/> </a> </p>
+    <p>{{item.name}}, {{item.description}}, {{item.price}}, {{item.environmental_impact}}</p>
+    <div><a href="{{ url_for('item', type=item.name) }}"> <img src="{{ url_for('static', filename='images/' + item.image)}}"/> </a></div>
     
     <form method="post" action="{{ url_for('home') }}">
         <input type="number" class="quantity" name="quantity" min="1" value="1" required>

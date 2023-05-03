@@ -14,7 +14,7 @@
 {% block page_content %}
 
     <!-- displays information about which ever item was clicked on -->
-    <p>{{item.name}}, {{item.description}}, {{item.price}}, {{item.environmental_impact}} <img src="{{ url_for('static', filename='images/' + item.image)}}" height="300" width="300"/> </p>
+    <p>{{item.name}}, {{item.description}}, {{item.price}}, {{item.environmental_impact}} <img src="{{ url_for('static', filename='images/' + item.image)}}"/> </p>
 
     <form method="post" action="{{ url_for('home') }}">
         <input type="number" name="quantity" min="1" value="1">

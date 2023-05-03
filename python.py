@@ -261,13 +261,25 @@ def calculate_total_price():
 
 if __name__ == '__main__':
     db.create_all()
-    if Item.query.filter_by(name='table').first() is None:
-        Item.add_item('table', 'wooden thing to hold plates', 50, 'table.jpg', 10)
-    if Item.query.filter_by(name='chair').first() is None:
-        Item.add_item('chair', 'wooden thing to sit on', 100, 'chair.jpg', 5)
+    # if Item.query.filter_by(name='table').first() is None:
+    #     Item.add_item('table', 'wooden thing to hold plates', 50, 'table.jpg', 10)
+    # if Item.query.filter_by(name='chair').first() is None:
+    #     Item.add_item('chair', 'wooden thing to sit on', 100, 'chair.jpg', 5)
 
     # if User.query.filter_by(username='lily').first() is None:
     #     User.register('lily', 'eye')
     # if User.query.filter_by(username='al').first() is None:
     #     User.register('al', 'cat')
+
+    if Item.query.filter_by(name='Porsche Carrera GT').first() is None:
+        Item.add_item('Porsche Carrera GT', 'The Porsche Carrera GT is a ', 1149995, 'carrera_gt.png', 10)
+    if Item.query.filter_by(name='Renault Clio V6').first() is None:
+        Item.add_item('Renault Clio V6', 'The Renault Clio V6 is a ', 59995, 'clio_v6.png', 6)
+    if Item.query.filter_by(name='BMW E30 M3').first() is None:
+        Item.add_item('BMW E30 M3', 'The BMW E30 M3 is a ', 77950, 'e30_m3.png', 4)   
+    if Item.query.filter_by(name='Mitsubishi Pajero Evolution').first() is None:
+        Item.add_item('Mitsubishi Pajero Evolution', 'The Mitsubishi Pajero Evolution is a ', 25848, 'pajero.png', 6)      
+    if Item.query.filter_by(name='Audi Quattro Rally').first() is None:
+        Item.add_item('Audi Quattro Rally', 'The Audi Quattro is a ', 127232, 'quattro.png', 6)   
+    
     app.run(debug=True)

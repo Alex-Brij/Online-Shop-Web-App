@@ -123,3 +123,9 @@ ul {
     cursor: pointer;
 
   }
+
+  img {
+    /* size: 800px 800px; */
+    opacity: 100%;
+    width: 100%;
+  }
