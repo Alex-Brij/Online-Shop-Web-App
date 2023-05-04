@@ -18,7 +18,7 @@
         <div><a href="{{ url_for('item', type=item.name) }}"> <img src="{{ url_for('static', filename='images/' + item.image)}}"/> </a></div>
         <h1>{{item.name}}</h1>
         <p class="price">£{{item.price|format}}</p>
-        <p>Environmental Impact: {{item.environmental_impact}}KgC/S</p>
+        <p>Environmental Impact: {{item.environmental_impact}}MPG</p>
         <p>{{item.description}}</p>
         
         <form method="post" action="{{ url_for('home') }}" class="add_basket">
@@ -26,7 +26,24 @@
             <input type="hidden" name="item_id" value="{{ item.id }}">
             <input type="submit" value="Add to Basket">
         </form>
+
+        <br> 
+        <br>
+        <hr class="line">
+
+        <form method="post" class="add_basket" style="text-align: left; margin-left: 5%;">
+            <input type="String" name="review" required>
+            <input type="hidden" name="item_id" value="{{ item.id }}">
+            <input type="submit" value="Submit Review">
+        </form>
+
+        <p class="reviews" style="font-weight: bolder; font-size: larger; text-decoration-line: underline;">REVIEWS:</p>
+
+        {% for review in reviews %}
+        <div class="reviews" ><p class="uppercase">{{review.username}}: {{review.review}}</p></div>
+        {% endfor %}
     </div>
+
 
 {% endblock %}
 </html>

@@ -24,7 +24,6 @@ app.app_context().push()
 def format_price(value):
     return '{:,.0f}'.format(value)
 
-
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(1, 16)])
     password = PasswordField('Password', validators=[InputRequired()])
@@ -45,6 +44,19 @@ class SignupForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(1, 10)])
     password = PasswordField('Password', validators=[InputRequired(), Length(1, 32)])
     submit = SubmitField('Sign up')
+
+class Review(db.Model):
+    __tablename__ = 'reviews'
+    id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer)
+    username = db.Column(db.String, db.ForeignKey('users.username'))
+    review = db.Column(db.String)
+
+
+    def write_review(username, item_id, review):
+        review = Review(username=username, item_id=item_id, review=review)
+        db.session.add(review)
+        db.session.commit()
 
 
 class User(UserMixin, db.Model):
@@ -204,14 +216,26 @@ def home():
 @app.route('/item', methods=['GET', 'POST'])
 def item():
     selected_item = request.args.get('type')
-    #print(selected_item)
+    item=Item.query.filter_by(name=selected_item).first()
+    item_id = item.id
+
+    # WHY DOES IT NOT NEED THIS METHOD!!!
+
+    # if request.method == 'POST':
+    #     quantity = request.form['quantity']
+    #     item_id = request.form['item_id']
+    #     print(f'{quantity} {item_id} added to basket')
+    #     Basket_item.add_item_to_basket(item_id, quantity, session['userid'])
+    #     return redirect(url_for('item'))
+
     if request.method == 'POST':
-        quantity = request.form['quantity']
-        item_id = request.form['item_id']
-        print(f'{quantity} {item_id} added to basket')
-        Basket_item.add_item_to_basket(item_id, quantity, session['userid'])
-        return redirect(url_for('item')) 
-    return render_template('item.html', item=Item.query.filter_by(name=selected_item).first())
+        review = request.form['review']
+        user_id = session['userid']
+        user = User.query.filter_by(id=user_id).first()
+        username = user.username
+        Review.write_review(username, item_id, review)
+
+    return render_template('item.html', item=Item.query.filter_by(name=selected_item).first(), reviews=Review.query.filter_by(item_id=item_id).all())
 
 
 @app.route('/basket', methods=['GET', 'POST'])
