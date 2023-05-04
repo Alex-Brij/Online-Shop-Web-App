@@ -20,6 +20,11 @@ lm = LoginManager(app)
 lm.login_view = 'login'
 app.app_context().push()
 
+@app.template_filter('format')
+def format_price(value):
+    return '{:,.0f}'.format(value)
+
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(1, 16)])
     password = PasswordField('Password', validators=[InputRequired()])

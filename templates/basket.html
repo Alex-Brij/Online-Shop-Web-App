@@ -12,7 +12,7 @@
 
 {% block page_content %}
 
-<p id="checkout-basket">Total Price: £{{total_price}} <a href="{{ url_for('checkout') }}" class="button-style">Checkout</a> </p>
+<p id="checkout-basket">Total Price: £{{total_price|format}} <a href="{{ url_for('checkout') }}" class="button-style">Checkout</a> </p>
 
     {% for item in basket %}
     {% set item_information = Item.query.get(item.item_id) %}
@@ -20,7 +20,7 @@
     <div class="card-basket">
         <div><a href="{{ url_for('item', type=item_information.name) }}"> <img src="{{ url_for('static', filename='images/' + item_information.image)}}"/> </a></div>
         <h1>{{item_information.name}}</h1>
-        <p class="price">£{{item_information.price}}</p>
+        <p class="price">£{{item_information.price|format}}</p>
         <p>Environmental Impact: {{item_information.environmental_impact}}MPG</p>
         
         <form method="post" action="{{ url_for('basket') }}" class="add_basket">
