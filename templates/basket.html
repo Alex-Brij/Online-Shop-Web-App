@@ -21,7 +21,7 @@
         <div><a href="{{ url_for('item', type=item_information.name) }}"> <img src="{{ url_for('static', filename='images/' + item_information.image)}}"/> </a></div>
         <h1>{{item_information.name}}</h1>
         <p class="price">£{{item_information.price}}</p>
-        <p>Environmental Impact: {{item_information.environmental_impact}}KgC/S</p>
+        <p>Environmental Impact: {{item_information.environmental_impact}}MPG</p>
         
         <form method="post" action="{{ url_for('basket') }}" class="add_basket">
             <input type="hidden" name="item_id" value="{{ item.item_id }}">
