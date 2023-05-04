@@ -17,9 +17,9 @@ body {
 
 .advert {
   border-color: #000000;
-  border-top-width: 10px;
+  border-top-width: 4px;
   border-style: solid;
-
+  text-align: center;
 }
 
   /* NAVBAR */
