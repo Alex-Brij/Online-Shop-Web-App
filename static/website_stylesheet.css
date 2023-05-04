@@ -1,111 +1,73 @@
+/* GENERAL STYLING */
+
 body {
-    background-color: #161617;
-    color: rgb(196, 197, 197);
+  font-family: 'Segoe UI';
+  /* font-family: verdana, sans-serif; */
+  /* font-family: Arial, sans-serif; */
+  /* background-color: #161617; */
+  background-color: #29292b;
+  color: rgb(196, 197, 197);
+  margin: 0;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+
+
+  /* NAVBAR */
+
+  /* makes nav bar stick to top of screen */
+  nav {
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+
   }
 
-
-/* this is a _demo_ container. remember the importance of relative and absolute positioning */
-.tooltip-container {
-    position: relative;
-    display: flex;
-    place-content: left;
-}
-
-/* styling of the tooltip display */
-p#tooltip-text {
-    display: none;
-    position: absolute;
-    top: -60px;
-    z-index: 1;
-    background: #00732c;
-    padding: 8px;
-    font-size: 1rem;
-    color: #fff;
-    border-radius: 2px;
-    animation: fadeIn 0.6s;
-}
-
-/* optional styling to add a "wedge" to the tooltip */
-p#tooltip-text:before {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  margin-left: -8px;
-  border: 8px solid transparent;
-  border-top: 8px solid #00732c;
-}
-
-@keyframes fadeIn {
- from {
-   opacity: 0;
- }
- to {
-   opacity: 1;
- }
-}
-
-
-
-/* STYLING */
-body {
-font-family: Arial, sans-serif; }
-
-/* NAVBAR */
-
-ul {
+  /* styling for navbar */
+  ul {
     list-style-type: none;
-    margin-bottom: 15px;
-    margin-top: -10px;
-    margin-left: -10px;
-    margin-right: -10px;
-    padding: 10px;
+    margin: 0;
     overflow: hidden;
-    /* background-color: #333; */
+    padding-top: 10px;
+    padding-bottom: 10px;
     background-color: #000000;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   }
   
+  /* makes items in nav bar float to left */
   li {
     float: left;
   }
   
+  /* styling for links in navbar */
   li a {
     display: block;
     color: rgb(196, 197, 197);
     text-align: center;
     padding: 14px 16px;
-    font-size: 200%;
-    font-weight: lighter;
-    font-stretch:extra-condensed;
+    font-size: 150%;
+    font-weight: 600;
     text-decoration: none;
   }
     
-  /* Change the link color to #111 (black) on hover */
-  li a:hover {
-    background-color: #111;
+  /* Change the link color on hover */
+  li.illuminate:hover {
+    background-color: #5b6361;
   }
 
-  .active {
-    background-color: #04AA6D;
+  /* logo postioning in nav bar */
+    li.logo {
+    margin-top: -18px;
+    margin-bottom: -30px;
+    margin-left: -40px;
   }
 
-
-  /* logo */
-  div.logo {
-    text-align: center;
-  }
-  
-  ul.logo_ul {
-    display: inline-block;
-    text-align: left;
-  }
-
-  li.logo-test {
-    margin-top: -20px;
-    margin-bottom: -45px;
-  }
-
-  li.profile-test {
+  /* profile symbol postioning in nav bar */
+  li.profile {
     margin-top: -5px;
     margin-bottom: -50px;
     margin-right: -20px;
@@ -113,105 +75,145 @@ ul {
 
 
 
-  /* SUBMIT BUTTONS */
-  input[type=submit] {
+
+
+  /* BUTTONS AND FORMS */
+  
+  /* Styling of all submit style buttons and quantity select fields */
+  input {
     background-color: #5b6361;
+    /* background-color: #222; */
     border: none;
-    color: white;
-    padding: 8px 8px;
+    border-radius: 2px;
+    color: rgb(196, 197, 197);
+    padding: 2px 8px;
     text-decoration: none;
     margin: 4px 2px;
     cursor: pointer;
+    
   }
 
-  /* INPUT BOXES */
-  input {
-    border: 2px solid black;
-    border-radius: 4px;
-    background-color: #5b6361;
-    color: white;
-  }
-
-  .select_form {
-    background-color: #5b6361;
-    color: white;
-  }
-
+  /* styling of quantity selector */
   .quantity {
     width: 50px;
   }
 
-  .sort {
-    width: 1000px;
+  /* styling of select forms excluding quantity (wtf select forms only) */
+  .select_form {
+    background-color: #5b6361;
+    color: rgb(196, 197, 197);
+    border-radius: 2px;
+    cursor: pointer;
   }
-  
+
+  /* styling of checkout button (different because its just a hyperlink) */
   .button-style {
     background-color: #5b6361;
     border: none;
-    border-radius: 4px;
-    color: white;
-    padding: 8px 8px;
+    border-radius: 2px;
+    color: rgb(196, 197, 197);
+    padding: 2px 8px;
     text-decoration: none;
     margin: 4px 2px;
     cursor: pointer;
-
   }
 
+
+
+
+  /* ITEM CARDS */
+
+  /* Car images */
   img {
     /* size: 800px 800px; */
     opacity: 60%;
     width: 100%;
   }
 
-
-  /* Items on home page */
-
+  /* styling of card that the images and information sits on*/
   .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     margin: auto;
     text-align: center;
     font-family: arial;
+    background-color: #161617;
+    /* width: 98%; */
+    margin-bottom: 22px;
+    padding-bottom: 12px;
   }
 
+  /* eddited version of card for the basket page*/
   .card-basket {
-    /* max-width: 20%; */
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     margin: 5% 5%;
     text-align: center;
     font-family: arial;
-    /* display: inline-block; */
     width: 40%;
     float: left;
+    background-color: #161617;
   }
   
+  /* styling of price on card */
   .price {
     color: grey;
     font-size: 22px;
   }
-  
-  .add_basket {
-    border: none;
-    outline: 0;
-    padding: 12px;
-    color: white;
-    background-color: #000;
-    text-align: center;
-    cursor: pointer;
-    width: 100%;
-    font-size: 18px;
-  }
-  
+    
+  /* styling when hovering over add to basket button */
   .add_basket:hover {
     opacity: 0.7;
   }
 
-  .basket-container {
-
-  }
-
+  /* positioning of checkout and total price on basket page */
   #basket-checkout {
     position: absolute;
     top: 100;
     margin: 50px 50px;
-
   } 
+
+
+
+
+
+/* HOVERING HINTS FOR CHECKOUT */
+
+  .center {
+    text-align: center;
+  }
+
+  .hint {
+    position: relative;
+    display: inline-block;
+  }
+
+  .hint-text {
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding-bottom: 5px;
+    border-radius: 6px;
+    width: 320px;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -160px;
+    margin-bottom: 5px;
+    position: absolute;
+    z-index: 1;
+  }
+
+  .hint-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+  }
+
+
+  .hint:hover .hint-text {
+    visibility: visible;
+  }

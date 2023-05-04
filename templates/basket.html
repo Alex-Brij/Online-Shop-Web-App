@@ -12,7 +12,7 @@
 
 {% block page_content %}
 
-<p id="checkout-basket">Total Price: {{total_price}} <a href="{{ url_for('checkout') }}" class="button-style">Checkout</a> </p>
+<p id="checkout-basket">Total Price: £{{total_price}} <a href="{{ url_for('checkout') }}" class="button-style">Checkout</a> </p>
 
     {% for item in basket %}
     {% set item_information = Item.query.get(item.item_id) %}

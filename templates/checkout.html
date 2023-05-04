@@ -13,18 +13,18 @@
 
 {% block page_content %}
 
-    <!-- <p>This is the checkout</p>
-    {{ wtf.quick_form(form, id="CheckoutForm") }}
-    <p>Total price of items in Basket is: {{total_price}}</p> -->
+<div class="center">
+    <p>Total Price: £{{total_price}}</p>
+    <br>
 
-
-    <div class="tooltip-container">
         <form method=post>
             {{ form.csrf_token }}
 
             {{ form.name.label }}
-            {{ form.name }}
-            <p data-tooltip="popup" class="hover-tooltip">Please enter the name on your card</p>
+            <div class="hint">
+                {{ form.name }}
+                <span class="hint-text">Please enter the name on your card</span>
+            </div>
             {% if form.name.errors %}
             {% for error in form.name.errors %}
             <p>{{ error }}</p>
@@ -33,8 +33,10 @@
             <br>
 
             {{ form.cardnumber.label }}
-            {{ form.cardnumber }}
-            <p data-tooltip="popup2" class="hover-tooltip">Please enter your card number</p>
+            <div class="hint">
+                {{ form.cardnumber }}
+                <span class="hint-text">Please enter the card number</span>
+            </div>
             {% if form.cardnumber.errors %}
             {% for error in form.cardnumber.errors %}
             <p>{{ error }}</p>
@@ -42,20 +44,11 @@
             {% endif %}
             <br>
 
-            {{ form.expiry_date_month.label }}
-            {{ form.expiry_date_month }}
-            <p data-tooltip="popup3" class="hover-tooltip">Please enter the month your card expires</p>
-            <br>
-
-            {{ form.expiry_date_year.label }}
-            {{ form.expiry_date_year }}
-            <p data-tooltip="popup4" class="hover-tooltip">Please enter the year your card expires</p>
-            <br>
-
-            
             {{ form.cvc.label }}
-            {{ form.cvc }}
-            <p data-tooltip="popup5" class="hover-tooltip">Please enter your card verification code (CVC)</p>
+            <div class="hint">
+                {{ form.cvc }}
+                <span class="hint-text">Please enter the card verification code (CVC)</span>
+            </div>
             {% if form.cvc.errors %}
             {% for error in form.cvc.errors %}
             <p>{{ error }}</p>
@@ -63,15 +56,25 @@
             {% endif %}
             <br>
 
+            {{ form.expiry_date_month.label }}
+            <div class="hint">
+                {{ form.expiry_date_month }}
+                <span class="hint-text">Please enter the month the card expires</span>
+            </div>
+            <br>
+
+            {{ form.expiry_date_year.label }}
+                <div class="hint">
+                {{ form.expiry_date_year }}
+            <span class="hint-text">Please enter the year the card expires</span>
+            </div>
+            <br>
+
+
             <input type=submit value="Finish and Pay">
 
         </form>
-    </div>
-
-    <div class="div-tooltip"></div>
-
-    <!-- {{ wtf.quick_form(form) }} -->
-
+</div>
 
 {% endblock %}
 

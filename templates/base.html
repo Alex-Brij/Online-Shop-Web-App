@@ -10,17 +10,17 @@
 <nav>
     <div >
         <ul>
-            <li class="logo-test"><a href="{{ url_for('home') }}"> <img src="{{ url_for('static', filename='images/' + 'logo_cropped.png')}}" height="65" width="500"/> </a></li>
-            <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li><a href="{{ url_for('basket') }}">Basket</a></li>
-            <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            <li class="logo"><a href="{{ url_for('home') }}"> <img src="{{ url_for('static', filename='images/' + 'logo_cropped.png')}}" height="65" width="500"/> </a></li>
+            <li class="illuminate"><a href="{{ url_for('home') }}">HOME</a></li>
+            <li class="illuminate"><a href="{{ url_for('basket') }}">BASKET</a></li>
+            <li class="illuminate"><a href="{{ url_for('signup') }}">SIGN UP</a></li>
             
                 {% if current_user.is_authenticated %}
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                    <li style="float:right"><a>{{current_user.username}}</a></li>
-                    <li style="float:right" class="profile-test"><a><img src="{{ url_for('static', filename='images/' + 'profile.png')}}" height="50" width="50"/></a></li>
+                    <li class="illuminate"><a href="{{ url_for('logout') }}">LOGOUT</a></li>
+                    <li style="float:right" class="uppercase"><a>{{current_user.username}}</a></li>
+                    <li style="float:right" class="profile"><a><img src="{{ url_for('static', filename='images/' + 'profile.png')}}" height="50" width="50"/></a></li>
                 {% else %}
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li class="illuminate"><a href="{{ url_for('login') }}">LOGIN</a></li>
                 {% endif %}
         </ul>
 
