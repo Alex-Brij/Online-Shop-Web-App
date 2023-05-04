@@ -10,11 +10,17 @@ body {
   margin: 0;
 }
 
+/* sets text to uppercase */
 .uppercase {
   text-transform: uppercase;
 }
 
+.advert {
+  border-color: #000000;
+  border-top-width: 10px;
+  border-style: solid;
 
+}
 
   /* NAVBAR */
 
@@ -48,7 +54,7 @@ body {
     display: block;
     color: rgb(196, 197, 197);
     text-align: center;
-    padding: 14px 16px;
+    padding: 14px 64px;
     font-size: 150%;
     font-weight: 600;
     text-decoration: none;
@@ -63,14 +69,14 @@ body {
     li.logo {
     margin-top: -18px;
     margin-bottom: -30px;
-    margin-left: -40px;
+    margin-left: -90px;
   }
 
   /* profile symbol postioning in nav bar */
   li.profile {
     margin-top: -5px;
     margin-bottom: -50px;
-    margin-right: -20px;
+    margin-right: -100px;
   }
 
 
@@ -125,7 +131,6 @@ body {
 
   /* Car images */
   img {
-    /* size: 800px 800px; */
     opacity: 60%;
     width: 100%;
   }
@@ -177,15 +182,18 @@ body {
 
 /* HOVERING HINTS FOR CHECKOUT */
 
+/* centers the checkout form */
   .center {
     text-align: center;
   }
 
+  /* position of form */
   .hint {
     position: relative;
     display: inline-block;
   }
 
+  /* styling of the hint */
   .hint-text {
     visibility: hidden;
     background-color: black;
@@ -202,6 +210,7 @@ body {
     z-index: 1;
   }
 
+  /* adds an arrow shape to the hint */
   .hint-text::after {
     content: "";
     position: absolute;
@@ -213,7 +222,7 @@ body {
     border-color: black transparent transparent transparent;
   }
 
-
+  /* makes the hint show up when hovering over the field in the form */
   .hint:hover .hint-text {
     visibility: visible;
   }

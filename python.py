@@ -37,8 +37,8 @@ class CheckoutForm(FlaskForm):
     cvc = StringField('CVC', validators=[Regexp(r'^[0-9]{3}$', message='Please Enter a 3 Digit Numer')])
 
 class SignupForm(FlaskForm):
-    username = StringField('Username', validators=[InputRequired(), Length(1, 32)])
-    password = StringField('Password', validators=[InputRequired(), Length(1, 32)])
+    username = StringField('Username', validators=[InputRequired(), Length(1, 10)])
+    password = PasswordField('Password', validators=[InputRequired(), Length(1, 32)])
     submit = SubmitField('Sign up')
 
 
