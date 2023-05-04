@@ -17,7 +17,7 @@
     <div class="card">
         <div><a href="{{ url_for('item', type=item.name) }}"> <img src="{{ url_for('static', filename='images/' + item.image)}}"/> </a></div>
         <h1>{{item.name}}</h1>
-        <p class="price">£{{item.price}}</p>
+        <p class="price">£{{item.price|format}}</p>
         <p>Environmental Impact: {{item.environmental_impact}}KgC/S</p>
         <p>{{item.description}}</p>
         
