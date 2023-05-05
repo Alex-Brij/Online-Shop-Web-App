@@ -32,7 +32,7 @@
         <hr class="line">
 
         <form method="post" class="add_basket" style="text-align: left; margin-left: 5%;">
-            <input type="String" name="review" required>
+            <input type="text" name="review" required size="50">
             <input type="hidden" name="item_id" value="{{ item.id }}">
             <input type="submit" value="Submit Review">
         </form>
@@ -40,7 +40,10 @@
         <p class="reviews" style="font-weight: bolder; font-size: larger; text-decoration-line: underline;">REVIEWS:</p>
 
         {% for review in reviews %}
-        <div class="reviews" ><p class="uppercase">{{review.username}}: {{review.review}}</p></div>
+        <div class="reviews">
+            <span class="uppercase">{{review.username}}:</span> <span>"{{review.review}}"</span>
+        </div>
+        <br>
         {% endfor %}
     </div>
 
