@@ -7,22 +7,39 @@ from flask_bootstrap import Bootstrap
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
+# INITIALISATION
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'lily!'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.sqlite3'
 db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
-# initialise main class of flask_login- LoginManager, stored in lm global variable
 lm = LoginManager(app)
-# needs to know where login page is. Sends login view to endpoint name of login route (name of function that handles that request)
-# in this case function is called login
 lm.login_view = 'login'
 app.app_context().push()
 
+
+# FUNCTIONS AND OTHER CODE
+
+# formats all the prices so they include commas
 @app.template_filter('format')
 def format_price(value):
     return '{:,.0f}'.format(value)
+
+# calculates total price of basket of current user 
+def calculate_total_price():
+    basket = Basket_item.query.filter_by(user_id = session['userid']).all()
+    total_price = 0
+    for item in basket:
+        item_price = Item.query.get(item.item_id).price
+        item_quantity = item.quantity
+        overall_price = item_price * item_quantity
+        total_price += overall_price
+
+    return total_price
+
+
+# FLASK FORMS
 
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(1, 16)])
@@ -45,26 +62,14 @@ class SignupForm(FlaskForm):
     password = PasswordField('Password', validators=[InputRequired(), Length(1, 32)])
     submit = SubmitField('Sign up')
 
-class Review(db.Model):
-    __tablename__ = 'reviews'
-    id = db.Column(db.Integer, primary_key=True)
-    item_id = db.Column(db.Integer)
-    username = db.Column(db.String, db.ForeignKey('users.username'))
-    review = db.Column(db.String)
 
-
-    def write_review(username, item_id, review):
-        review = Review(username=username, item_id=item_id, review=review)
-        db.session.add(review)
-        db.session.commit()
-
+# DATABASES / MODELS
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(16), index=True, unique=True)
     password_hash = db.Column(db.String(64))
-
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -83,11 +88,102 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {0}>'.format(self.username)
     
+
+# returns a user when given an id
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
 
 
+class Item(db.Model):
+    __tablename__ = 'items'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    description = db.Column(db.String)
+    price = db.Column(db.Integer)
+    environmental_impact = db.Column(db.Integer)
+    image = db.Column(db.String)
+
+    @staticmethod
+    def add_item(name, description, price, image, environmental_impact):
+        item = Item(name=name, description=description, price=price, image=image, environmental_impact=environmental_impact)
+        db.session.add(item)
+        db.session.commit()
+        return item
+    
+    # method to display item as its name   
+    def __repr__(self):
+        return f'{self.name}'
+
+
+class Basket_item(db.Model):
+    __tablename__ = 'basket'
+    id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
+    quantity = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def add_item_to_basket(item_id, quantity, current_user):
+        exists = db.session.query(db.exists().where((Basket_item.item_id == item_id) & (Basket_item.user_id == current_user))).scalar()
+        if exists:
+            item = Basket_item.query.filter_by(item_id=item_id, user_id=current_user).first()
+            old_quantity = item.quantity
+            new_quantity = old_quantity + int(quantity)
+            Basket_item.query.filter_by(item_id=item_id, user_id=current_user).delete()
+            item = Basket_item(item_id=item_id, quantity=int(new_quantity), user_id = current_user)
+            db.session.add(item) 
+        else:
+            item = Basket_item(item_id=item_id, quantity=int(quantity), user_id = current_user)
+            db.session.add(item)
+
+        db.session.commit()
+        return item
+    
+    # method to change quantity of items in basket, also used to delete items if quantity set to zero 
+    def change_quantity(item_id, quantity, current_user):
+        if int(quantity) > 0:
+            item = Basket_item.query.filter_by(item_id=item_id, user_id=current_user).first()
+            item.quantity = int(quantity)
+        else:
+            Basket_item.query.filter_by(item_id=item_id, user_id=current_user).delete()
+
+        db.session.commit()
+
+
+class Review(db.Model):
+    __tablename__ = 'reviews'
+    id = db.Column(db.Integer, primary_key=True)
+    item_id = db.Column(db.Integer)
+    username = db.Column(db.String, db.ForeignKey('users.username'))
+    review = db.Column(db.String)
+
+    def write_review(username, item_id, review):
+        review = Review(username=username, item_id=item_id, review=review)
+        db.session.add(review)
+        db.session.commit()
+
+
+# ROUTES
+
+# signs user up and redirects to loging page unless user already exists, then it displays message saying user exists
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    form = SignupForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        password = form.password.data
+        
+        if User.query.filter_by(username=username).first() is None:
+            User.register(username, password)
+            return redirect(url_for('login'))
+
+        else:
+            return render_template('signup.html', form=form, exists=True)
+
+    return render_template('signup.html', form=form)
+
+
+# allows signed up user to login if password is correct and sets userid in session to the users id, redirects to home page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -107,85 +203,9 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    form = SignupForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        password = form.password.data
-        
-        if User.query.filter_by(username=username).first() is None:
-            User.register(username, password)
-            return redirect(url_for('login'))
 
-        else:
-            return render_template('signup.html', form=form, exists=True)
-
-    return render_template('signup.html', form=form)
-
-
-# table to hold items
-class Item(db.Model):
-    __tablename__ = 'items'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    description = db.Column(db.String)
-    price = db.Column(db.Integer)
-    environmental_impact = db.Column(db.Integer)
-    image = db.Column(db.String)
-
-# method to add an item to the table
-    @staticmethod
-    def add_item(name, description, price, image, environmental_impact):
-        item = Item(name=name, description=description, price=price, image=image, environmental_impact=environmental_impact)
-        db.session.add(item)
-        db.session.commit()
-        return item
-    
-# method to display item as its name   
-    def __repr__(self):
-        return f'{self.name}'
-
-
-class Basket_item(db.Model):
-    __tablename__ = 'basket'
-    id = db.Column(db.Integer, primary_key=True)
-    item_id = db.Column(db.Integer, db.ForeignKey('items.id'))
-    quantity = db.Column(db.Integer)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-
-
-# method to add item to basket
-    def add_item_to_basket(item_id, quantity, current_user):
-        exists = db.session.query(db.exists().where((Basket_item.item_id == item_id) & (Basket_item.user_id == current_user))).scalar()
-        if exists:
-            item = Basket_item.query.filter_by(item_id=item_id, user_id=current_user).first()
-            old_quantity = item.quantity
-            new_quantity = old_quantity + int(quantity)
-            Basket_item.query.filter_by(item_id=item_id, user_id=current_user).delete()
-            item = Basket_item(item_id=item_id, quantity=int(new_quantity), user_id = current_user)
-            db.session.add(item) 
-        else:
-            item = Basket_item(item_id=item_id, quantity=int(quantity), user_id = current_user)
-            db.session.add(item)
-
-        db.session.commit()
-        return item
-    
-
-# method to change quantity of items in basket 
-    def change_quantity(item_id, quantity, current_user):
-        if int(quantity) > 0:
-            item = Basket_item.query.filter_by(item_id=item_id, user_id=current_user).first()
-            item.quantity = int(quantity)
-        else:
-            Basket_item.query.filter_by(item_id=item_id, user_id=current_user).delete()
-
-        db.session.commit()
-
-
-# renders home page with all items from database
-# if number entered in form for adding items to bsket it gets the number and prints it
+# renders home page with all items from database, allows user to click on item to view more info or add a quantity of the item to the basket
+# also allows items to be sorted by different properties
 @app.route('/', methods=['GET', 'POST'])
 def home():
     form = SortingForm()
@@ -212,32 +232,29 @@ def home():
     return render_template('home.html',form=form, items=items)
 
 
-# gets the item that has been clicked on and sends user to item page which is now showing the information specific to that item 
+# gets the item that has been clicked on and sends user to item page which is now showing the information specific to that item
+# also allows item to be added to basket and allows users to write and read reviews if they are logged in, else ridirects to login
 @app.route('/item', methods=['GET', 'POST'])
 def item():
     selected_item = request.args.get('type')
     item=Item.query.filter_by(name=selected_item).first()
     item_id = item.id
 
-    # WHY DOES IT NOT NEED THIS METHOD!!!
-
-    # if request.method == 'POST':
-    #     quantity = request.form['quantity']
-    #     item_id = request.form['item_id']
-    #     print(f'{quantity} {item_id} added to basket')
-    #     Basket_item.add_item_to_basket(item_id, quantity, session['userid'])
-    #     return redirect(url_for('item'))
-
     if request.method == 'POST':
-        review = request.form['review']
-        user_id = session['userid']
-        user = User.query.filter_by(id=user_id).first()
-        username = user.username
-        Review.write_review(username, item_id, review)
+        if current_user.is_authenticated:
+            review = request.form['review']
+            user_id = session['userid']
+            user = User.query.filter_by(id=user_id).first()
+            username = user.username
+            Review.write_review(username, item_id, review)
+        else:
+            return redirect(url_for('login'))
 
     return render_template('item.html', item=Item.query.filter_by(name=selected_item).first(), reviews=Review.query.filter_by(item_id=item_id).all())
 
 
+# displays all items in users basket, allows to add items to basket or delete items by setting there quantity to zero
+# diisplays the total price of items in the basket and allows user to checkout
 @app.route('/basket', methods=['GET', 'POST'])
 @login_required
 def basket():
@@ -248,10 +265,11 @@ def basket():
         return redirect(url_for('basket'))
     
     total_price = calculate_total_price()
-
     return render_template('basket.html', basket=Basket_item.query.filter_by(user_id = session['userid']), Item=Item, total_price=total_price)
 
 
+# has a form to enter to checkout that includes error messages if the wrong informtion is entered and pop hints when hovering over inputs
+# if the form validates sends user to payment_taken page and removes all items from users basket
 @app.route('/checkout', methods=['GET', 'POST'])
 @login_required
 def checkout():
@@ -260,13 +278,9 @@ def checkout():
         basket = Basket_item.query.filter_by(user_id = session['userid'])
         for item in basket:
             Basket_item.change_quantity(item.item_id, 0, session['userid'])      
-
         return redirect(url_for('payment_taken'))
-        
     
-
     total_price = calculate_total_price()
-
     return render_template('checkout.html', total_price=total_price, form=form)
 
 
@@ -276,24 +290,12 @@ def payment_taken():
     return render_template('payment_taken.html')
 
 
-def calculate_total_price():
-    basket = Basket_item.query.filter_by(user_id = session['userid']).all()
-    total_price = 0
-    for item in basket:
-        item_price = Item.query.get(item.item_id).price
-        item_quantity = item.quantity
-        overall_price = item_price * item_quantity
-        total_price += overall_price
 
-    return total_price
+# MAIN
 
-
+# starts website and fills item database with items in the shop
 if __name__ == '__main__':
     db.create_all()
-    # if User.query.filter_by(username='lily').first() is None:
-    #     User.register('lily', 'eye')
-    # if User.query.filter_by(username='al').first() is None:
-    #     User.register('al', 'cat')
 
     if Item.query.filter_by(name='Porsche Carrera GT').first() is None:
         Item.add_item('Porsche Carrera GT', 'The Porsche Carrera GT is a mid engined V10 sports car that was manufactured by Porsche in very limmited quantities '
