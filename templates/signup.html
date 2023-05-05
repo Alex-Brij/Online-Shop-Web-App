@@ -14,19 +14,15 @@
 </head>
 
 
-
-
 {% block page_content %}
 
-{% if exists == True %}
-    <p>There is already an account with that username</p>
-{% endif %}
-
+    {% if exists == True %}
+        <p>There is already an account with that username</p>
+    {% endif %}
 
     <h1>Sign Up</h1>
-
     {{ wtf.quick_form(form) }}
 
-
 {% endblock %}
+
 </html>

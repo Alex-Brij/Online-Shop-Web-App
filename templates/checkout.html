@@ -5,79 +5,77 @@
 
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <link rel="stlesheet" type="text/css" href="website_stylesheet.css">
-    <title>Checkout</title>
-</head>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stlesheet" type="text/css" href="website_stylesheet.css">
+        <title>Checkout</title>
+    </head>
 
-{% block page_content %}
+    {% block page_content %}
 
-<div class="center">
-    <p>Total Price: £{{total_price|format}}</p>
-    <br>
+    <div class="center">
+        <p>Total Price: £{{total_price|format}}</p>
+        <br>
 
-        <form method=post>
-            {{ form.csrf_token }}
+            <form method=post>
+                {{ form.csrf_token }}
 
-            {{ form.name.label }}
-            <div class="hint">
-                {{ form.name }}
-                <span class="hint-text">Please enter the name on your card</span>
-            </div>
-            {% if form.name.errors %}
-            {% for error in form.name.errors %}
-            <p>{{ error }}</p>
-            {% endfor %}
-            {% endif %}
-            <br>
-
-            {{ form.cardnumber.label }}
-            <div class="hint">
-                {{ form.cardnumber }}
-                <span class="hint-text">Please enter the card number</span>
-            </div>
-            {% if form.cardnumber.errors %}
-            {% for error in form.cardnumber.errors %}
-            <p>{{ error }}</p>
-            {% endfor %}
-            {% endif %}
-            <br>
-
-            {{ form.cvc.label }}
-            <div class="hint">
-                {{ form.cvc }}
-                <span class="hint-text">Please enter the card verification code (CVC)</span>
-            </div>
-            {% if form.cvc.errors %}
-            {% for error in form.cvc.errors %}
-            <p>{{ error }}</p>
-            {% endfor %}
-            {% endif %}
-            <br>
-
-            {{ form.expiry_date_month.label }}
-            <div class="hint">
-                {{ form.expiry_date_month }}
-                <span class="hint-text">Please enter the month the card expires</span>
-            </div>
-            <br>
-
-            {{ form.expiry_date_year.label }}
+                {{ form.name.label }}
                 <div class="hint">
-                {{ form.expiry_date_year }}
-            <span class="hint-text">Please enter the year the card expires</span>
-            </div>
-            <br>
+                    {{ form.name }}
+                    <span class="hint-text">Please enter the name on your card</span>
+                </div>
+                {% if form.name.errors %}
+                {% for error in form.name.errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+                {% endif %}
+                <br>
+
+                {{ form.cardnumber.label }}
+                <div class="hint">
+                    {{ form.cardnumber }}
+                    <span class="hint-text">Please enter the card number</span>
+                </div>
+                {% if form.cardnumber.errors %}
+                {% for error in form.cardnumber.errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+                {% endif %}
+                <br>
+
+                {{ form.cvc.label }}
+                <div class="hint">
+                    {{ form.cvc }}
+                    <span class="hint-text">Please enter the card verification code (CVC)</span>
+                </div>
+                {% if form.cvc.errors %}
+                {% for error in form.cvc.errors %}
+                <p>{{ error }}</p>
+                {% endfor %}
+                {% endif %}
+                <br>
+
+                {{ form.expiry_date_month.label }}
+                <div class="hint">
+                    {{ form.expiry_date_month }}
+                    <span class="hint-text">Please enter the month the card expires</span>
+                </div>
+                <br>
+
+                {{ form.expiry_date_year.label }}
+                    <div class="hint">
+                    {{ form.expiry_date_year }}
+                <span class="hint-text">Please enter the year the card expires</span>
+                </div>
+                <br>
 
 
-            <input type=submit value="Finish and Pay">
+                <input type=submit value="Finish and Pay">
 
-        </form>
-</div>
+            </form>
+    </div>
 
-{% endblock %}
-
-
+    {% endblock %}
 
 </html>

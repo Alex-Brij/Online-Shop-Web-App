@@ -3,33 +3,34 @@
 
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <link rel="stlesheet" type="text/css" href="website_stylesheet.css">
-    <title>Basket</title>
-</head>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stlesheet" type="text/css" href="website_stylesheet.css">
+        <title>Basket</title>
+    </head>
 
 
-{% block page_content %}
+    {% block page_content %}
 
-<p id="checkout-basket">Total Price: £{{total_price|format}} <a href="{{ url_for('checkout') }}" class="button-style">Checkout</a> </p>
+    <p id="checkout-basket">Total Price: £{{total_price|format}} <a href="{{ url_for('checkout') }}" class="button-style">Checkout</a> </p>
 
-    {% for item in basket %}
-    {% set item_information = Item.query.get(item.item_id) %}
+        {% for item in basket %}
+            {% set item_information = Item.query.get(item.item_id) %}
 
-    <div class="card-basket">
-        <div><a href="{{ url_for('item', type=item_information.name) }}"> <img src="{{ url_for('static', filename='images/' + item_information.image)}}"/> </a></div>
-        <h1>{{item_information.name}}</h1>
-        <p class="price">£{{item_information.price|format}}</p>
-        <p>Environmental Impact: {{item_information.environmental_impact}}MPG</p>
-        
-        <form method="post" action="{{ url_for('basket') }}" class="add_basket">
-            <input type="hidden" name="item_id" value="{{ item.item_id }}">
-            <input type="number" class="quantity" name="quantity" min="0" value="{{item.quantity}}" required>
-            <input type="submit" value="Set Quantity">
-        </form>
-    </div>
-    {% endfor %}
+            <div class="card-basket">
+                <div><a href="{{ url_for('item', type=item_information.name) }}"> <img src="{{ url_for('static', filename='images/' + item_information.image)}}"/> </a></div>
+                <h1>{{item_information.name}}</h1>
+                <p class="price">£{{item_information.price|format}}</p>
+                <p>Environmental Impact: {{item_information.environmental_impact}}MPG</p>
+                
+                <form method="post" action="{{ url_for('basket') }}" class="add_basket">
+                    <input type="hidden" name="item_id" value="{{ item.item_id }}">
+                    <input type="number" class="quantity" name="quantity" min="0" value="{{item.quantity}}" required>
+                    <input type="submit" value="Set Quantity">
+                </form>
+            </div>
+        {% endfor %}
 
-{% endblock %}
+    {% endblock %}
+
 </html>

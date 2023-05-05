@@ -23,17 +23,23 @@ body {
   margin-left: 5%;
 }
 
+/* line that seperates reviews from item information */
 .line {
   border: solid 4px rgb(196, 197, 197);
   width: 95%;
 }
 
+
+/* stling advert box */
 .advert {
   border-color: #000000;
   border-top-width: 4px;
   border-style: solid;
   text-align: center;
 }
+
+
+
 
   /* NAVBAR */
 

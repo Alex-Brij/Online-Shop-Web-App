@@ -2,30 +2,22 @@
 {% extends "base.html" %}
 
 
-
 <!DOCTYPE html>
 
 <html>
 
-<head>
-    <meta charset="utf-8">
-    <link rel="stlesheet" type="text/css" href="website_stylesheet.css">
-    <title>Home</title>
-</head>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stlesheet" type="text/css" href="website_stylesheet.css">
+        <title>Home</title>
+    </head>
 
 
+    {% block page_content %}
 
+        <h1>Login</h1>
+        {{ wtf.quick_form(form) }}
 
-{% block page_content %}
+    {% endblock %}
 
-<!-- need to change this so it only prints this if you have clicked the add item button and your not logged in -->
-<!-- {% if status == False %}
-    <p>You must be logged in to add items to basket</p>
-{% endif %} -->
-
-    <h1>Login</h1>
-
-    {{ wtf.quick_form(form) }}
-
-{% endblock %}
 </html>
