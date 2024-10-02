@@ -1,0 +1,5 @@
+- This project was completed in year 1 of university where we had to create a dynamic website primarly using Flask.
+- The Flask backend runs the web application and connects the SQLite databasee which is used to store the users, items and user baskets.
+- The webpages are HTML templates that the required content could be passed to and rendered dynamicaly by the python code.
+- Flask Forms are used throught the website to take in and validate user input.
+- The website allows users to signup and create an account, login and out of their account, view and add various items to their basket and checkout.
